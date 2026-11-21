@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Affordables by Bee</title>
+<meta name="theme-color" content="#2E3C87">
+<style>
+:root{
+  --blue:#2E3C87; --blue-d:#1F2A66; --blue-l:#E9ECF8; --cream:#F8F9FE;
+  --gold:#D4A537; --gold-l:#FFF6DE; --queen:#B5367A; --queen-l:#FCE9F2;
+  --king:#2E3C87; --king-l:#E6EAFA; --uni:#11806A; --uni-l:#E2F5F0;
+  --ink:#151A33; --muted:#6B7090; --line:#E6E8F2; --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#DDE1EF;color:var(--ink)}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:84px}
+button{font:inherit;border:none;background:none;cursor:pointer;color:inherit}
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.pad{padding:0 16px}
+h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;position:sticky;top:0;background:var(--cream);z-index:5}
+.topbar img{width:40px;height:40px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;border:1px solid var(--line)}
+.search{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;box-shadow:0 2px 8px rgba(46,60,135,.06)}
+.search input{border:none;outline:none;flex:1;font-size:15px;background:none}
+.search svg{flex:none}
+
+/* banner carousel */
+.carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 16px 4px;scrollbar-width:none}
+.carousel::-webkit-scrollbar{display:none}
+.slide{flex:0 0 88%;scroll-snap-align:center;border-radius:20px;height:170px;padding:18px;color:#fff;position:relative;overflow:hidden}
+.slide h3{font-size:24px;line-height:1.1;font-weight:800;max-width:70%}
+.slide p{font-size:13px;opacity:.9;margin:6px 0 12px;max-width:65%}
+.slide .cta{display:inline-block;background:#fff;color:var(--blue);font-weight:700;font-size:13px;padding:8px 14px;border-radius:20px}
+.slide .art{position:absolute;right:-6px;bottom:-10px;font-size:96px;opacity:.95}
+.s1{background:linear-gradient(135deg,#B3122E,#7A0B1F)}
+.s2{background:linear-gradient(135deg,var(--blue),#4E5FC0)}
+.s3{background:linear-gradient(135deg,#11806A,#0B5C4C)}
+.dots{display:flex;justify-content:center;gap:5px;margin:10px 0 4px}
+.dots span{width:6px;height:6px;border-radius:3px;background:#C7CCE3;transition:.2s}
+.dots span.on{width:20px;background:var(--blue)}
+
+/* section label */
+.label{display:flex;justify-content:space-between;align-items:center;margin:18px 16px 10px}
+.label .chip{background:var(--blue-l);color:var(--blue);font-weight:700;font-size:14px;padding:7px 14px;border-radius:20px}
+.label a{font-style:italic;font-size:14px;color:var(--ink);cursor:pointer}
+
+/* royal sections */
+.royals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px}
+.royal{border-radius:18px;padding:12px 6px 10px;text-align:center;background:#fff;border:1.5px solid var(--line);transition:.2s;cursor:pointer}
+.royal.on{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.royal .emb{width:72px;height:72px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center}
+.royal b{display:block;font-size:15px;letter-spacing:.3px}
+.royal small{font-size:11px;color:var(--muted)}
+.royal.q .emb{background:var(--queen-l)} .royal.q.on{border-color:var(--queen)} .royal.q b{color:var(--queen)}
+.royal.k .emb{background:var(--king-l)}  .royal.k.on{border-color:var(--king)}  .royal.k b{color:var(--king)}
+.royal.u .emb{background:var(--uni-l)}   .royal.u.on{border-color:var(--uni)}   .royal.u b{color:var(--uni)}
+
+/* moneybox promo */
+.promo{margin:16px;border-radius:20px;padding:16px;background:linear-gradient(135deg,var(--blue-d),var(--blue));color:#fff;display:flex;gap:14px;align-items:center;cursor:pointer;position:relative;overflow:hidden}
+.promo:after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(212,165,55,.25)}
+.promo .ico{width:54px;height:54px;border-radius:16px;background:var(--gold);display:grid;place-items:center;flex:none;font-size:26px}
+.promo h4{font-size:16px}
+.promo p{font-size:12.5px;opacity:.85;margin-top:3px}
+
+/* products */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
+.card{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 10px rgba(46,60,135,.05);cursor:pointer}
+.card .img{aspect-ratio:1/1;background:#F3F4FA;display:grid;place-items:center;position:relative;overflow:hidden}
+.card .img img{width:100%;height:100%;object-fit:cover}
+.card .ph{font-size:54px}
+.card .tag{position:absolute;left:8px;top:8px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:10px;color:#fff}
+.tag.queens{background:var(--queen)} .tag.kings{background:var(--king)} .tag.unisex{background:var(--uni)}
+.card .info{padding:10px 12px 12px}
+.card h5{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.price{font-weight:800;font-size:15px}
+.heart svg{width:24px;height:24px;stroke:var(--blue);fill:none;stroke-width:2}
+.heart.on svg{fill:var(--blue)}
+.empty-cat{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:20}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:#7A7F98;position:relative;flex:1}
+.nav button svg{width:24px;height:24px}
+.nav button.on{color:var(--blue);font-weight:700}
+.nav .badge{position:absolute;top:-4px;right:calc(50% - 20px);background:#E5383B;color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
+.nav .mb .bub{width:46px;height:46px;margin-top:-22px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#B8862A);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(212,165,55,.5);border:3px solid #fff}
+
+/* empty states */
+.empty{margin:120px auto 0;width:min(88%,360px);background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 20px;text-align:center}
+.empty svg{width:44px;height:44px;stroke:var(--blue);fill:none;stroke-width:1.8;margin-bottom:10px}
+.empty b{display:block;font-size:17px;margin-bottom:6px}
+.empty p{color:var(--muted);font-size:14px}
+
+/* cart */
+.citem{display:flex;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;margin:0 16px 10px;align-items:center}
+.citem .th{width:64px;height:64px;border-radius:12px;background:#F3F4FA;display:grid;place-items:center;font-size:32px;overflow:hidden;flex:none}
+.citem .th img{width:100%;height:100%;object-fit:cover}
+.citem .meta{flex:1;min-width:0}
+.citem .meta b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qty{display:flex;align-items:center;gap:10px;margin-top:6px}
+.qty button{width:26px;height:26px;border-radius:8px;background:var(--blue-l);color:var(--blue);font-weight:800}
+.summary{margin:16px;background:#fff;border-radius:18px;border:1px solid var(--line);padding:16px}
+.summary .r{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;color:var(--muted)}
+.summary .r.t{color:var(--ink);font-weight:800;font-size:16px;border-top:1px dashed var(--line);padding-top:10px}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;margin-top:10px;text-align:center}
+.btn.gold{background:var(--gold);color:#2A1F05}
+.btn.ghost{background:var(--blue-l);color:var(--blue)}
+
+/* moneybox */
+.mb-hero{margin:4px 16px 0;border-radius:24px;padding:20px;background:radial-gradient(circle at 85% 15%,rgba(212,165,55,.45),transparent 45%),linear-gradient(140deg,var(--blue-d),var(--blue) 60%,#4253B5);color:#fff;position:relative;overflow:hidden}
+.mb-hero small{opacity:.8;font-size:13px}
+.mb-hero .bal{font-size:34px;font-weight:800;margin:4px 0 2px;letter-spacing:.5px}
+.mb-hero .hint{font-size:12.5px;opacity:.85}
+.mb-hero .xmas{position:absolute;right:14px;top:14px;font-size:30px}
+.goal{margin-top:16px;background:rgba(255,255,255,.12);border-radius:14px;padding:12px}
+.goal .gt{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:8px}
+.bar{height:8px;border-radius:4px;background:rgba(255,255,255,.2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:4px;transition:width .5s}
+.mb-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 16px}
+.mb-actions .btn{margin:0}
+.tagline{text-align:center;font-weight:800;color:var(--blue);font-size:18px;margin:18px 16px 4px}
+.tagline span{color:var(--gold)}
+.note{margin:12px 16px;background:var(--gold-l);border:1px solid #F0D99A;border-radius:14px;padding:12px 14px;font-size:13px;color:#6A4F0E;display:flex;gap:10px}
+.steps{margin:6px 16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:6px 14px}
+.step{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}
+.step:last-child{border:none}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--blue-l);color:var(--blue);font-weight:800;display:grid;place-items:center;flex:none;font-size:14px}
+.step p{font-size:14px}
+.hist{margin:6px 16px 20px}
+.hist .h{display:flex;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;font-size:14px}
+.hist .h small{display:block;color:var(--muted);font-size:12px}
+.hist .h .amt{font-weight:800;color:var(--uni)}
+
+/* account */
+.acc-head{background:var(--blue);padding:22px 16px 70px;color:#fff}
+.acc-head h1{font-size:22px}
+.acc-card{margin:-56px 16px 0;background:#fff;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center;box-shadow:0 6px 20px rgba(31,42,102,.15)}
+.avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#5B6BCB);display:grid;place-items:center;color:#fff;font-size:28px;font-weight:800;flex:none;border:4px solid var(--blue-l)}
+.acc-card b{font-size:17px;color:var(--blue-d)}
+.acc-card p{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;margin-top:6px;background:var(--gold-l);color:#8A6512;font-size:12px;font-weight:700;padding:4px 10px;border-radius:12px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 16px}
+.quick button{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 10px;display:flex;align-items:center;gap:10px;justify-content:center;font-weight:700;font-size:14px}
+.quick .qi{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:18px}
+.menu{margin:0 16px 20px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:4px 16px}
+.mi{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.mi:last-child{border:none}
+.mi svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;flex:none}
+.mi span{flex:1;font-size:15px}
+.mi span small{display:block;font-size:12px;color:var(--muted)}
+.mi i{color:#B5B9CF;font-style:normal;font-size:18px}
+
+/* sheet / modal */
+.sheet-bg{position:fixed;inset:0;background:rgba(15,20,45,.45);display:none;z-index:40}
+.sheet{position:fixed;left:50%;transform:translate(-50%,100%);bottom:0;width:100%;max-width:480px;background:#fff;border-radius:24px 24px 0 0;padding:10px 18px 24px;z-index:41;transition:transform .28s ease;max-height:88vh;overflow:auto}
+.sheet.open{transform:translate(-50%,0)}
+.grab{width:42px;height:5px;border-radius:3px;background:#D5D8E6;margin:4px auto 14px}
+.pd-img{aspect-ratio:1/1;border-radius:18px;background:#F3F4FA;display:grid;place-items:center;font-size:110px;overflow:hidden}
+.pd-img img{width:100%;height:100%;object-fit:cover}
+.sheet h2{font-size:20px;margin:14px 0 4px}
+.sheet .desc{color:var(--muted);font-size:14px;line-height:1.5}
+.sheet .big{font-size:24px;font-weight:800;margin:10px 0}
+.plan{background:var(--blue-l);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--blue-d)}
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.amts button{border:1.5px solid var(--line);border-radius:12px;padding:12px 4px;font-weight:700;font-size:14px}
+.amts button.on{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
+.field{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none}
+.field:focus{border-color:var(--blue)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;padding:10px 16px;border-radius:12px;opacity:0;transition:.25s;z-index:60;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.refbox{margin:14px 0;border-radius:18px;padding:16px;text-align:center;background:linear-gradient(140deg,var(--blue-d),var(--blue));color:#fff}
+.refbox small{font-size:11px;letter-spacing:1px;opacity:.8}
+.refbox .ref{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:26px;font-weight:800;letter-spacing:1.5px;margin:6px 0 10px;color:var(--gold)}
+.refbox .cp{background:#fff;color:var(--blue);font-weight:700;font-size:13px;padding:8px 16px;border-radius:20px}
+.paybox{border:1px solid var(--line);border-radius:16px;padding:4px 14px}
+.pr{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.pr:last-child{border:none}
+.pr span{color:var(--muted);flex:none;width:118px}
+.pr b{flex:1;text-align:right}
+.pr button{background:var(--blue-l);color:var(--blue);font-weight:700;font-size:12px;padding:5px 10px;border-radius:10px}
+.btn:disabled{opacity:.6}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--blue-l);border-radius:12px;padding:4px;margin:6px 0 14px}
+.tabs button{padding:10px;border-radius:9px;font-weight:700;color:var(--blue)}
+.tabs button.on{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.fl{font-size:13px;color:var(--muted);margin:10px 0 5px;display:block}
+.err{color:#C62828;font-size:13px;margin-top:8px;min-height:16px}
+.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.opt.on{border-color:var(--blue);background:var(--blue-l)}
+.opt .rd{width:20px;height:20px;border-radius:50%;border:2px solid #B5B9CF;flex:none;display:grid;place-items:center}
+.opt.on .rd{border-color:var(--blue)} .opt.on .rd:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--blue)}
+.opt b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;letter-spacing:.5px}
+.opt small{display:block;color:var(--muted);font-size:12px}
+.mb-login{grid-column:1/-1}
+.preview-flag{background:var(--gold);color:#2A1F05;text-align:center;font-size:12px;font-weight:700;padding:6px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ============ SHOP ============ -->
+<section class="page active" id="p-shop">
+  <div class="topbar">
+    <img src="data:image/jpeg;base64,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" alt="Affordables by Bee">
+    <label class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E3C87" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" placeholder="Search for anything…" oninput="renderProducts()">
+    </label>
+  </div>
+
+  <div class="carousel" id="carousel">
+    <div class="slide s1"><h3>Christmas Royal Sale</h3><p>Gifts for your Kings &amp; Queens, pay small small.</p><span class="cta" onclick="go('shop');pickCat('all')">Shop now →</span><div class="art">🎁</div></div>
+    <div class="slide s2"><h3>Save to buy what you deserve</h3><p>Fill your MoneyBox, then spend it on anything here.</p><span class="cta" onclick="go('moneybox')">Open MoneyBox →</span><div class="art">👑</div></div>
+    <div class="slide s3"><h3>Unisex Picks</h3><p>Made for everyone, priced for everyone.</p><span class="cta" onclick="pickCat('unisex')">Explore →</span><div class="art">✨</div></div>
+  </div>
+  <div class="dots" id="dots"><span class="on"></span><span></span><span></span></div>
+
+  <div class="label"><span class="chip">Shop by Royalty</span></div>
+  <div class="royals">
+    <div class="royal q" data-cat="queens" onclick="pickCat('queens')">
+      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#B5367A"/><circle cx="28" cy="31" r="9" fill="none" stroke="#B5367A" stroke-width="3.5"/><path d="M28 40v11M22.5 46h11" stroke="#B5367A" stroke-width="3.5" stroke-linecap="round"/></svg></div><b>QUEENS</b><small>For her</small>
+    </div>
+    <div class="royal k" data-cat="kings" onclick="pickCat('kings')">
+      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#2E3C87"/><circle cx="24" cy="38" r="9" fill="none" stroke="#2E3C87" stroke-width="3.5"/><path d="M30.5 31.5 39 23M32 23h7v7" stroke="#2E3C87" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>KINGS</b><small>For him</small>
+    </div>
+    <div class="royal u" data-cat="unisex" onclick="pickCat('unisex')">
+      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#11806A"/><circle cx="28" cy="34" r="8" fill="none" stroke="#11806A" stroke-width="3.5"/><path d="M28 42v10M23.5 47.5h9" stroke="#11806A" stroke-width="3.5" stroke-linecap="round"/><path d="M33.7 28.3 40 22M35 22h5v5" stroke="#11806A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>UNISEX</b><small>For all</small>
+    </div>
+  </div>
+
+  <div class="promo" onclick="go('moneybox')">
+    <div class="ico">🐝</div>
+    <div><h4>Bee MoneyBox</h4><p>Save towards Christmas, then shop with it. Save to buy what you deserve.</p></div>
+  </div>
+
+  <div class="label"><span class="chip" id="catTitle">All products</span><a onclick="pickCat('all')">See all</a></div>
+  <div class="grid" id="grid"></div>
+  <div style="height:20px"></div>
+</section>
+
+<!-- ============ CART ============ -->
+<section class="page" id="p-cart">
+  <h1 class="title">My Bee Cart</h1>
+  <div id="cartBody"></div>
+</section>
+
+<!-- ============ MONEYBOX ============ -->
+<section class="page" id="p-moneybox">
+  <h1 class="title">Bee MoneyBox</h1>
+  <div class="mb-hero">
+    <div class="xmas">🎄</div>
+    <small>MoneyBox balance</small>
+    <div class="bal" id="mbBal">₦0</div>
+    <div class="hint">Spend it on anything in the store</div>
+    <div class="goal">
+      <div class="gt"><span id="goalName">Christmas goal</span><span id="goalPct">0%</span></div>
+      <div class="bar"><i id="goalBar" style="width:0"></i></div>
+    </div>
+  </div>
+  <div class="mb-actions" id="mbActions"></div>
+  <div class="tagline">Save to buy what <span>you deserve</span> 👑</div>
+  <div class="note"><span>⚠️</span><span><b>Not refundable as cash.</b> Money saved in your MoneyBox can only be used to buy items on Affordables by Bee.</span></div>
+  <div class="steps">
+    <div class="step"><div class="n">1</div><p>Add any amount, whenever you like</p></div>
+    <div class="step"><div class="n">2</div><p>Watch your balance grow towards your goal</p></div>
+    <div class="step"><div class="n">3</div><p>Pay for your item with your MoneyBox at checkout</p></div>
+  </div>
+  <div class="label"><span class="chip">Savings history</span></div>
+  <div class="hist" id="hist"></div>
+</section>
+
+<!-- ============ WISHLIST ============ -->
+<section class="page" id="p-wishlist">
+  <h1 class="title" id="wlTitle">My Bee Wishlist (0)</h1>
+  <div id="wlBody"></div>
+</section>
+
+<!-- ============ ACCOUNT ============ -->
+<section class="page" id="p-account">
+  <div class="acc-head"><h1>My Bee Profile</h1></div>
+  <div class="acc-card">
+    <div class="avatar" id="av">🐝</div>
+    <div><b id="accName">Guest Customer</b><p id="accSub">Sign in to use your MoneyBox</p><span class="pill">👑 Royal Member</span></div>
+  </div>
+  <div class="quick">
+    <button onclick="go('moneybox')"><span class="qi" style="background:var(--gold-l)">🐝</span>MoneyBox</button>
+    <button onclick="toast('Refer & Earn: coming soon')"><span class="qi" style="background:var(--uni-l)">🎁</span>Refer &amp; Earn</button>
+  </div>
+  <div class="menu">
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Edit Profile</span><i>›</i></button>
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Delivery Addresses<small>Manage delivery addresses</small></span><i>›</i></button>
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Order History</span><i>›</i></button>
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><span>Payment Methods</span><i>›</i></button>
+    <button class="mi" onclick="toast('Chat on WhatsApp: coming soon')"><svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg><span>Contact us on WhatsApp</span><i>›</i></button>
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Terms &amp; Conditions</span><i>›</i></button>
+  </div>
+  <div class="pad" id="accAuth" style="padding-bottom:20px"></div>
+</section>
+
+<!-- bottom nav -->
+<nav class="nav">
+  <button data-p="shop" class="on" onclick="go('shop')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16l1 5a3 3 0 0 1-5 2 3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-5-2l1-5zm1 9.5V20h5v-4h4v4h5v-6.5a4.6 4.6 0 0 1-3-.6 4.6 4.6 0 0 1-4 .5 4.6 4.6 0 0 1-4-.5 4.6 4.6 0 0 1-3 .6z"/></svg>Shop</button>
+  <button data-p="cart" onclick="go('cart')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM1 2h3.3l.9 2H21l-3.6 7.5a2 2 0 0 1-1.8 1.1H8.1l-1 1.9h12v2H5l2.1-4L3.6 4H1z"/></svg>Cart<span class="badge" id="cartBadge" style="display:none">0</span></button>
+  <button data-p="moneybox" class="mb" onclick="go('moneybox')"><span class="bub"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 7h-1V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zM5 5h10a1 1 0 0 1 1 1v1H5a1 1 0 0 1 0-2zm15 10h-3a2 2 0 0 1 0-4h3z"/></svg></span>MoneyBox</button>
+  <button data-p="wishlist" onclick="go('wishlist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg>Wishlist</button>
+  <button data-p="account" onclick="go('account')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
+</nav>
+
+<div class="sheet-bg" id="bg" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet"><div class="grab"></div><div id="sheetBody"></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* =========================================================
+   PRODUCTS: this is the only part you edit to add items.
+   Put the photo in the images/ folder and write its name
+   in "image". If the photo is missing, an icon shows instead.
+   category: "queens" | "kings" | "unisex"
+   ========================================================= */
+const PRODUCTS = [
+  {id:1, name:"Rose Gold Wristwatch", sub:"Ladies' stainless steel", price:38500, category:"queens", image:"images/watch-rose.jpg", icon:"⌚"},
+  {id:2, name:"Leather Handbag",      sub:"Medium tote, 3 colours",  price:45000, category:"queens", image:"images/handbag.jpg",    icon:"👜"},
+  {id:3, name:"Classic Agbada Set",   sub:"Embroidered, 3-piece",    price:62000, category:"kings",  image:"images/agbada.jpg",     icon:"🧥"},
+  {id:4, name:"Men's Leather Loafers",sub:"Sizes 40–46",             price:29900, category:"kings",  image:"images/loafers.jpg",    icon:"👞"},
+  {id:5, name:"Wireless Earbuds",     sub:"30hr battery, ENC mic",   price:24500, category:"unisex", image:"images/earbuds.jpg",    icon:"🎧"},
+  {id:6, name:"Perfume Gift Set",     sub:"Christmas edition, 3×30ml",price:33000,category:"unisex", image:"images/perfume.jpg",    icon:"🎁"},
+  {id:7, name:"Gele & Ipele Set",     sub:"Aso-oke, ready to tie",   price:27500, category:"queens", image:"images/gele.jpg",       icon:"👑"},
+  {id:8, name:"Smart Fitness Watch",  sub:"Heart rate, sleep tracking",price:21000,category:"unisex",image:"images/smartwatch.jpg", icon:"⏱️"},
+];
+
+/* =========================================================
+   PAYMENT ACCOUNT (shown to customers)
+   ========================================================= */
+const BANK = { bank:"PremiumTrust Bank", number:"0111321770", name:"Bukola Feyisola Ajiboye" };
+const CUSTOMER_EMAIL_DOMAIN = "customers.affordablesbybee.app"; // phone numbers become logins like 2348031234567@...
+
+/* ---------------- helpers ---------------- */
+const fmt = n => "₦" + Math.round(n||0).toLocaleString("en-NG");
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k,d){try{return JSON.parse(localStorage.getItem("bee_"+k)) ?? d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("bee_"+k,JSON.stringify(v))}catch(e){}}
+};
+function lagosDay(){ // DDMMYY in Lagos time
+  const p = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos",day:"2-digit",month:"2-digit",year:"2-digit"}).formatToParts(new Date());
+  const g = t => p.find(x=>x.type===t).value; return g("day")+g("month")+g("year");
+}
+function normPhone(p){ let d = String(p).replace(/\D/g,""); if(d.startsWith("0") && d.length===11) d = "234"+d.slice(1); if(d.length===10) d = "234"+d; return d; }
+function niceDate(ts){ const d = ts && ts.toDate ? ts.toDate() : new Date(); return d.toLocaleDateString("en-NG",{day:"numeric",month:"short",year:"numeric"}); }
+
+/* ---------------- state ---------------- */
+let cart = store.get("cart",{}), wish = store.get("wish",[]);
+let goal = store.get("goal",{amount:150000,name:"Christmas goal"});
+let cat = "all";
+let user = null, profile = null, myRefs = [], myPays = [], unsubs = [], fbReady = false;
+const catLabel = {all:"All products",queens:"👑 Queens",kings:"👑 Kings",unisex:"✨ Unisex"};
+
+/* ---------------- shop ---------------- */
+function imgTag(p,cls){ return `<img src="${p.image}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'${cls||'ph'}',textContent:'${p.icon}'}))">`; }
+function renderProducts(){
+  const q = document.getElementById("q").value.toLowerCase();
+  const list = PRODUCTS.filter(p => (cat==="all"||p.category===cat) && (p.name+p.sub).toLowerCase().includes(q));
+  document.getElementById("catTitle").textContent = catLabel[cat];
+  document.querySelectorAll(".royal").forEach(r=>r.classList.toggle("on", r.dataset.cat===cat));
+  document.getElementById("grid").innerHTML = list.length ? list.map(p=>`
+    <div class="card" onclick="openProduct(${p.id})">
+      <div class="img">${imgTag(p)}<span class="tag ${p.category}">${p.category.toUpperCase()}</span></div>
+      <div class="info"><h5>${esc(p.name)}</h5><div class="sub">${esc(p.sub)}</div>
+        <div class="row"><span class="price">${fmt(p.price)}</span>
+        <button class="heart ${wish.includes(p.id)?'on':''}" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div>
+      </div></div>`).join("") : `<div class="empty-cat">No items here yet. Check back soon!</div>`;
+}
+function pickCat(c){ cat = (cat===c && c!=="all") ? "all" : c; renderProducts(); document.getElementById("catTitle").scrollIntoView({behavior:"smooth",block:"start"}); }
+function toggleWish(id){ wish = wish.includes(id) ? wish.filter(x=>x!==id) : [...wish,id]; store.set("wish",wish); toast(wish.includes(id)?"Added to wishlist ♥":"Removed from wishlist"); renderAll(); }
+function addCart(id){ cart[id]=(cart[id]||0)+1; store.set("cart",cart); toast("Added to cart 🛒"); renderAll(); }
+function qty(id,d){ cart[id]=(cart[id]||0)+d; if(cart[id]<=0) delete cart[id]; store.set("cart",cart); renderAll(); }
+
+function balance(){ return profile ? (profile.balance||0) : 0; }
+
+function renderCart(){
+  const ids = Object.keys(cart).filter(i=>PRODUCTS.find(x=>x.id==i)), el = document.getElementById("cartBody");
+  const count = ids.reduce((s,i)=>s+cart[i],0);
+  const b = document.getElementById("cartBadge"); b.style.display = count?"grid":"none"; b.textContent = count;
+  if(!ids.length){ el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11l2-8H6.5"/></svg><b>Your cart is empty</b><p>There are no products in your cart yet.</p></div>`; return; }
+  let total = 0;
+  el.innerHTML = ids.map(i=>{ const p = PRODUCTS.find(x=>x.id==i); total += p.price*cart[i];
+    return `<div class="citem"><div class="th">${imgTag(p,'')}</div><div class="meta"><b>${esc(p.name)}</b><span class="price">${fmt(p.price)}</span>
+    <div class="qty"><button onclick="qty(${i},-1)">−</button><b>${cart[i]}</b><button onclick="qty(${i},1)">+</button></div></div></div>`}).join("") +
+    `<div class="summary"><div class="r"><span>Subtotal</span><span>${fmt(total)}</span></div>
+     <div class="r"><span>MoneyBox balance</span><span>${fmt(balance())}</span></div>
+     <div class="r t"><span>To pay</span><span>${fmt(Math.max(0,total-balance()))}</span></div>
+     <button class="btn" onclick="toast('Checkout: coming next')">Checkout</button></div>`;
+}
+function renderWish(){
+  document.getElementById("wlTitle").textContent = `My Bee Wishlist (${wish.length})`;
+  const el = document.getElementById("wlBody");
+  if(!wish.length){ el.innerHTML = `<div class="empty" style="background:var(--blue-l)"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg><b>Your wishlist is empty</b><p>Products you like will appear here so you can share or buy later.</p></div>`; return; }
+  el.innerHTML = `<div class="grid">` + wish.map(id=>{const p=PRODUCTS.find(x=>x.id==id); if(!p) return ""; return `
+    <div class="card" onclick="openProduct(${p.id})"><div class="img">${imgTag(p)}</div><div class="info"><h5>${esc(p.name)}</h5>
+    <div class="row"><span class="price">${fmt(p.price)}</span><button class="heart on" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div></div></div>`}).join("") + `</div>`;
+}
+
+/* ---------------- moneybox ---------------- */
+function renderMB(){
+  const bal = balance();
+  document.getElementById("mbBal").textContent = fmt(bal);
+  const pct = Math.min(100, goal.amount ? bal/goal.amount*100 : 0);
+  document.getElementById("goalName").textContent = `${goal.name}: ${fmt(goal.amount)}`;
+  document.getElementById("goalPct").textContent = Math.floor(pct)+"%";
+  document.getElementById("goalBar").style.width = pct+"%";
+  const pend = myPays.filter(h=>h.status==="pending").reduce((s,h)=>s+h.amount,0);
+  document.querySelector(".mb-hero .hint").textContent = !user ? "Sign in to start saving" : pend ? `${fmt(pend)} awaiting confirmation` : "Spend it on anything in the store";
+  document.getElementById("mbActions").innerHTML = user
+    ? `<button class="btn gold" onclick="openDeposit()">+ Add money</button><button class="btn ghost" onclick="openGoal()">Set goal</button>`
+    : `<button class="btn gold mb-login" onclick="openAuth('signup')">Create account to start saving</button>`;
+  const st = s => s==="confirmed" ? '<b style="color:var(--uni)">Confirmed</b>' : s==="rejected" ? '<b style="color:#C62828">Not received</b>' : '<b style="color:#B07A10">Pending</b>';
+  document.getElementById("hist").innerHTML = !user ? `<div class="h" style="justify-content:center;color:var(--muted)">Sign in to see your savings.</div>`
+    : myPays.length ? myPays.map(h=>`<div class="h" onclick="showPay('${h.ref}',${h.amount})" style="cursor:pointer"><span>${h.ref}<small>${niceDate(h.createdAt)} · ${st(h.status)}</small></span><span class="amt" ${h.status!=="confirmed"?'style="color:#B07A10"':""}>+${fmt(h.amount)}</span></div>`).join("")
+    : `<div class="h" style="justify-content:center;color:var(--muted)">No savings yet. Start with any amount.</div>`;
+}
+
+function renderAccount(){
+  document.getElementById("accName").textContent = profile ? profile.name : "Guest Customer";
+  document.getElementById("accSub").textContent = profile ? "+" + profile.phone : "Sign in to use your MoneyBox";
+  document.getElementById("av").textContent = profile ? profile.name.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase() : "🐝";
+  document.getElementById("accAuth").innerHTML = user
+    ? `<button class="btn ghost" onclick="logout()">Sign out</button>`
+    : `<button class="btn" onclick="openAuth('signin')">Sign in</button><button class="btn ghost" onclick="openAuth('signup')">Create account</button>`;
+}
+
+function renderAll(){ renderProducts(); renderCart(); renderWish(); renderMB(); renderAccount(); }
+
+/* ---------------- auth ---------------- */
+function openAuth(mode){
+  if(!fbReady){ toast("Connecting… please try again in a moment"); return; }
+  const su = mode==="signup";
+  sheet(`<h2>${su?"Create your account":"Welcome back"}</h2>
+   <div class="tabs"><button class="${!su?'on':''}" onclick="openAuth('signin')">Sign in</button><button class="${su?'on':''}" onclick="openAuth('signup')">Create account</button></div>
+   ${su?`<label class="fl">Full name</label><input class="field" id="aName" autocomplete="name" placeholder="e.g. Ada Obi">`:""}
+   <label class="fl">Phone number</label><input class="field" id="aPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08031234567">
+   <label class="fl">Password${su?" (at least 6 characters)":""}</label><input class="field" id="aPass" type="password" autocomplete="${su?'new-password':'current-password'}" placeholder="••••••">
+   <div class="err" id="aErr"></div>
+   <button class="btn" id="aBtn" onclick="doAuth(${su})">${su?"Create account":"Sign in"}</button>
+   ${!su?`<p class="desc" style="text-align:center;margin-top:12px;font-size:13px">Forgot your password? Contact us on WhatsApp and we'll help.</p>`:""}`);
+}
+async function doAuth(su){
+  const err = m => document.getElementById("aErr").textContent = m;
+  const phone = normPhone(document.getElementById("aPhone").value), pass = document.getElementById("aPass").value;
+  const name = su ? document.getElementById("aName").value.trim().replace(/\s+/g," ") : "";
+  if(su && name.length<3) return err("Please enter your full name");
+  if(phone.length!==13 || !phone.startsWith("234")) return err("Enter a valid Nigerian phone number");
+  if(pass.length<6) return err("Password must be at least 6 characters");
+  const btn = document.getElementById("aBtn"); btn.disabled = true; btn.textContent = "Please wait…";
+  const email = phone + "@" + CUSTOMER_EMAIL_DOMAIN;
+  try{
+    if(su){
+      const cred = await fb.createUserWithEmailAndPassword(fb.auth, email, pass);
+      await fb.setDoc(fb.doc(fb.db,"users",cred.user.uid), {name, phone, balance:0, createdAt:fb.serverTimestamp()});
+      toast(`Welcome, ${name.split(" ")[0]}! 👑`);
+    } else {
+      await fb.signInWithEmailAndPassword(fb.auth, email, pass);
+      toast("Signed in ✓");
+    }
+    closeSheet();
+  }catch(e){
+    btn.disabled = false; btn.textContent = su?"Create account":"Sign in";
+    const c = e.code||"";
+    err(c.includes("email-already-in-use") ? "This phone number already has an account. Please sign in."
+      : c.includes("invalid-credential")||c.includes("wrong-password")||c.includes("user-not-found") ? "Wrong phone number or password."
+      : c.includes("too-many-requests") ? "Too many attempts. Please wait a few minutes."
+      : c.includes("network") ? "Network problem. Check your connection." : "Something went wrong. Please try again.");
+  }
+}
+function logout(){ fb.signOut(fb.auth); toast("Signed out"); }
+
+function onUser(u){
+  unsubs.forEach(f=>f()); unsubs = []; user = u; profile = null; myRefs = []; myPays = [];
+  if(u){
+    unsubs.push(fb.onSnapshot(fb.doc(fb.db,"users",u.uid), s => { profile = s.exists() ? s.data() : null; renderAll(); }));
+    unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"refs"), fb.where("uid","==",u.uid)), s => {
+      myRefs = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); }));
+    unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"payments"), fb.where("uid","==",u.uid)), s => {
+      myPays = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); renderMB(); }));
+  }
+  renderAll();
+}
+
+/* ---------------- deposit with references ---------------- */
+let chosenRef = "new";
+function openDeposit(){
+  if(!user){ openAuth("signin"); return; }
+  chosenRef = myRefs.length ? myRefs[0].id : "new";
+  const opts = myRefs.slice(0,5).map(r=>`<div class="opt ${chosenRef===r.id?'on':''}" data-r="${r.id}" onclick="pickRef('${r.id}')"><span class="rd"></span><span><b>${r.id}</b><small>Created ${niceDate(r.createdAt)}</small></span></div>`).join("");
+  sheet(`<h2>Add to MoneyBox</h2><p class="desc">Choose an amount or type your own.</p>
+   <div class="amts">${[2000,5000,10000,20000,50000,100000].map(a=>`<button onclick="document.getElementById('amt').value=${a};document.querySelectorAll('.amts button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">${fmt(a)}</button>`).join("")}</div>
+   <input class="field" id="amt" type="number" inputmode="numeric" placeholder="Enter amount (₦)">
+   ${myRefs.length?`<label class="fl" style="margin-top:14px">Which payment reference do you want to use?</label>${opts}
+   <div class="opt ${chosenRef==='new'?'on':''}" data-r="new" onclick="pickRef('new')"><span class="rd"></span><span><b style="font-family:inherit">Generate a new reference</b><small>Get a fresh reference for this payment</small></span></div>`:""}
+   <div class="note" style="margin:12px 0 0"><span>⚠️</span><span>MoneyBox savings are not refundable as cash. You can only spend them on items in this store.</span></div>
+   <div class="err" id="dErr"></div>
+   <button class="btn gold" id="genBtn" onclick="startPayment()">Continue to payment</button>`);
+}
+function pickRef(r){ chosenRef = r; document.querySelectorAll(".opt").forEach(o=>o.classList.toggle("on", o.dataset.r===r)); }
+
+async function newReference(){
+  const day = lagosDay(), cRef = fb.doc(fb.db,"counters",day);
+  return fb.runTransaction(fb.db, async tx => {
+    const s = await tx.get(cRef);
+    const n = (s.exists() ? s.data().n : 0) + 1, seqStr = String(n).padStart(4,"0"), id = "MBOX"+day+seqStr;
+    tx.set(cRef, {n});
+    tx.set(fb.doc(fb.db,"refs",id), {uid:user.uid, day, seq:n, seqStr, name:profile.name, phone:profile.phone, createdAt:fb.serverTimestamp()});
+    return id;
+  });
+}
+async function startPayment(){
+  const a = Math.round(+document.getElementById("amt").value);
+  const err = m => document.getElementById("dErr").textContent = m;
+  if(!a || a<100) return err("Enter at least ₦100");
+  if(!profile) return err("Your profile is still loading. Try again in a moment.");
+  const btn = document.getElementById("genBtn"); btn.disabled = true; btn.textContent = "Generating…";
+  try{
+    const ref = chosenRef==="new" ? await newReference() : chosenRef;
+    await fb.addDoc(fb.collection(fb.db,"payments"), {uid:user.uid, ref, amount:a, status:"pending", name:profile.name, phone:profile.phone, createdAt:fb.serverTimestamp()});
+    showPay(ref,a);
+  }catch(e){ console.error(e); btn.disabled=false; btn.textContent="Continue to payment"; err("Could not create your reference. Check your connection and try again."); }
+}
+
+function copyTxt(t,label){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(label+" copied ✓")).catch(()=>{const i=document.createElement("input");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy");toast(label+" copied ✓")}catch(e){};i.remove();}); }
+function showPay(ref,a){
+  sheet(`<h2>Make your transfer</h2><p class="desc">Transfer exactly this amount and put the reference in the <b>narration / description</b>.</p>
+   <div class="refbox"><small>YOUR PAYMENT REFERENCE</small><div class="ref">${ref}</div>
+     <button class="cp" onclick="copyTxt('${ref}','Reference')">Copy reference</button></div>
+   <div class="paybox">
+     <div class="pr"><span>Amount</span><b>${fmt(a)}</b><button onclick="copyTxt('${a}','Amount')">Copy</button></div>
+     <div class="pr"><span>Bank</span><b>${BANK.bank}</b></div>
+     <div class="pr"><span>Account number</span><b>${BANK.number}</b><button onclick="copyTxt('${BANK.number}','Account number')">Copy</button></div>
+     <div class="pr"><span>Account name</span><b>${BANK.name}</b></div>
+   </div>
+   <div class="note" style="margin:12px 0 0"><span>ℹ️</span><span>Your MoneyBox is credited once we confirm the transfer with this reference. Without the reference, your payment may be delayed.</span></div>
+   <button class="btn" onclick="closeSheet();toast('Thank you! We will confirm shortly 🐝')">I have made the transfer</button>`);
+}
+function openGoal(){
+  sheet(`<h2>Set your savings goal</h2><p class="desc">What are you saving for?</p>
+   <input class="field" id="gn" value="${esc(goal.name)}" style="margin:12px 0 8px">
+   <input class="field" id="ga" type="number" inputmode="numeric" value="${goal.amount}">
+   <button class="btn" onclick="goal={name:document.getElementById('gn').value||'My goal',amount:+document.getElementById('ga').value||0};store.set('goal',goal);closeSheet();renderMB();toast('Goal saved 👑')">Save goal</button>`);
+}
+
+/* ---------------- product sheet + ui ---------------- */
+function openProduct(id){
+  const p = PRODUCTS.find(x=>x.id==id); const weekly = Math.ceil(p.price/8/100)*100;
+  sheet(`<div class="pd-img">${imgTag(p)}</div><h2>${esc(p.name)}</h2><p class="desc">${esc(p.sub)}</p><div class="big">${fmt(p.price)}</div>
+   <div class="plan">🐝 Or save <b>${fmt(weekly)}/week</b> in your MoneyBox for 8 weeks</div>
+   <button class="btn" onclick="addCart(${p.id});closeSheet()">Add to cart</button>
+   <button class="btn ghost" onclick="toggleWish(${p.id});closeSheet()">${wish.includes(p.id)?"Remove from":"Add to"} wishlist</button>`);
+}
+function sheet(html){ document.getElementById("sheetBody").innerHTML = html; document.getElementById("bg").style.display="block"; requestAnimationFrame(()=>document.getElementById("sheet").classList.add("open")); }
+function closeSheet(){ document.getElementById("sheet").classList.remove("open"); setTimeout(()=>document.getElementById("bg").style.display="none",250); }
+let tt; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),2200); }
+function go(p){
+  document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active", s.id==="p-"+p));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on", b.dataset.p===p));
+  window.scrollTo(0,0);
+}
+const car = document.getElementById("carousel"), dots = [...document.querySelectorAll("#dots span")];
+car.addEventListener("scroll",()=>{ const i = Math.round(car.scrollLeft/(car.firstElementChild.offsetWidth+12)); dots.forEach((d,j)=>d.classList.toggle("on",i===j)); });
+setInterval(()=>{ if(!document.getElementById("p-shop").classList.contains("active")) return; const w = car.firstElementChild.offsetWidth+12; const i = Math.round(car.scrollLeft/w); car.scrollTo({left: ((i+1)%dots.length)*w, behavior:"smooth"}); }, 4000);
+
+window.addEventListener("fb-ready", () => { fbReady = true; fb.onAuthStateChanged(fb.auth, onUser); });
+window.addEventListener("fb-failed", () => toast("Couldn't connect. Check your internet."));
+renderAll();
+</script>
+
+<script type="module">
+/* ---------------- Firebase connection ---------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDProzn2JrpfldwjEz7jwyQQyvsLW4D30s",
+  authDomain: "affordables-by-bee.firebaseapp.com",
+  projectId: "affordables-by-bee",
+  storageBucket: "affordables-by-bee.firebasestorage.app",
+  messagingSenderId: "894734714811",
+  appId: "1:894734714811:web:a405f464d1d2396af1e69e"
+};
+try{
+  const V = "10.12.2", B = `https://www.gstatic.com/firebasejs/${V}/`;
+  const { initializeApp } = await import(B+"firebase-app.js");
+  const A = await import(B+"firebase-auth.js");
+  const F = await import(B+"firebase-firestore.js");
+  const app = initializeApp(firebaseConfig);
+  const auth = A.getAuth(app); const db = F.getFirestore(app);
+  window.fb = { auth, db,
+    onAuthStateChanged:A.onAuthStateChanged, createUserWithEmailAndPassword:A.createUserWithEmailAndPassword,
+    signInWithEmailAndPassword:A.signInWithEmailAndPassword, signOut:A.signOut,
+    doc:F.doc, setDoc:F.setDoc, addDoc:F.addDoc, collection:F.collection, query:F.query, where:F.where,
+    onSnapshot:F.onSnapshot, runTransaction:F.runTransaction, serverTimestamp:F.serverTimestamp };
+  window.dispatchEvent(new Event("fb-ready"));
+}catch(e){ console.error(e); window.dispatchEvent(new Event("fb-failed")); }
+</script>
+</body>
+</html>
