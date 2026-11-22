@@ -198,6 +198,27 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .opt b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;letter-spacing:.5px}
 .opt small{display:block;color:var(--muted);font-size:12px}
 .mb-login{grid-column:1/-1}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;padding:8px 14px;border-radius:20px;background:#fff;border:1.5px solid var(--line);font-weight:700;font-size:13px;color:var(--muted)}
+.chips button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.look{margin:0 16px 14px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:0 2px 10px rgba(46,60,135,.05)}
+.look-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.look-h b{font-size:16px}
+.look .duo{display:flex;align-items:center;gap:8px}
+.look .it{flex:1;text-align:center;min-width:0}
+.look .it .im{aspect-ratio:1/1;border-radius:14px;background:#F3F4FA;display:grid;place-items:center;font-size:44px;overflow:hidden}
+.look .it .im img{width:100%;height:100%;object-fit:cover}
+.look .it span{display:block;font-size:12.5px;font-weight:600;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.look .it .im .ph{font-size:44px;display:inline;margin:0}
+.look-h .tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;color:#fff}
+.look .plus{flex:none;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;font-weight:800;display:grid;place-items:center;font-size:18px}
+.look .tip{margin-top:12px;background:var(--blue-l);border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.45;color:var(--blue-d)}
+.look .btn{margin-top:10px;padding:11px}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border-radius:14px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:15px;color:var(--ink)}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:14px 0 2px}
+.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.link{color:var(--blue);font-weight:700;font-size:13px;text-decoration:underline;background:none}
 .preview-flag{background:var(--gold);color:#2A1F05;text-align:center;font-size:12px;font-weight:700;padding:6px}
 </style>
 </head>
@@ -275,6 +296,16 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
   <div class="hist" id="hist"></div>
 </section>
 
+<!-- ============ PAIR IT ============ -->
+<section class="page" id="p-pair">
+  <h1 class="title" style="padding-bottom:4px">Pair It ✨</h1>
+  <p class="pad" style="color:var(--muted);font-size:14px;margin-bottom:12px">Style tips: what to wear with what.</p>
+  <div class="chips" id="pairChips">
+    <button data-c="all" class="on">All</button><button data-c="queens">👑 Queens</button><button data-c="kings">👑 Kings</button><button data-c="unisex">✨ Unisex</button>
+  </div>
+  <div id="pairList"></div>
+</section>
+
 <!-- ============ WISHLIST ============ -->
 <section class="page" id="p-wishlist">
   <h1 class="title" id="wlTitle">My Bee Wishlist (0)</h1>
@@ -307,7 +338,7 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 <nav class="nav">
   <button data-p="shop" class="on" onclick="go('shop')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16l1 5a3 3 0 0 1-5 2 3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-5-2l1-5zm1 9.5V20h5v-4h4v4h5v-6.5a4.6 4.6 0 0 1-3-.6 4.6 4.6 0 0 1-4 .5 4.6 4.6 0 0 1-4-.5 4.6 4.6 0 0 1-3 .6z"/></svg>Shop</button>
   <button data-p="cart" onclick="go('cart')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM1 2h3.3l.9 2H21l-3.6 7.5a2 2 0 0 1-1.8 1.1H8.1l-1 1.9h12v2H5l2.1-4L3.6 4H1z"/></svg>Cart<span class="badge" id="cartBadge" style="display:none">0</span></button>
-  <button data-p="moneybox" class="mb" onclick="go('moneybox')"><span class="bub"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 7h-1V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zM5 5h10a1 1 0 0 1 1 1v1H5a1 1 0 0 1 0-2zm15 10h-3a2 2 0 0 1 0-4h3z"/></svg></span>MoneyBox</button>
+  <button data-p="pair" class="mb" onclick="go('pair')"><span class="bub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 6a2 2 0 1 1 2 2c-1 0-2 .7-2 1.8V10"/><path d="M12 10 3 16.5c-.8.6-.4 1.5.5 1.5h17c.9 0 1.3-.9.5-1.5L12 10z"/></svg></span>Pair It</button>
   <button data-p="wishlist" onclick="go('wishlist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg>Wishlist</button>
   <button data-p="account" onclick="go('account')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
 </nav>
@@ -336,10 +367,33 @@ const PRODUCTS = [
 ];
 
 /* =========================================================
+   PAIR IT: style tips. Add a look by copying one block.
+   items: what goes together (icon shows if no photo).
+   productId: link to a product above so "Shop this look" adds it to cart.
+   ========================================================= */
+const PAIRINGS = [
+  {title:"Evening Glam", category:"queens", items:[{name:"Strappy Heels", icon:"👠"},{name:"Leather Handbag", icon:"👜", productId:2}],
+   tip:"Match the metal: gold-strap heels look best with a bag that has gold hardware. Keep the bag smaller than your outfit is loud."},
+  {title:"Weekend Chic", category:"queens", items:[{name:"High-waist Jeans", icon:"👖"},{name:"Block Heels", icon:"👡"}],
+   tip:"Cuffed or ankle-length jeans show off block heels and make your legs look longer. Nude heels go with any wash."},
+  {title:"Owambe Queen", category:"queens", items:[{name:"Gele & Ipele Set", icon:"👑", productId:7},{name:"Rose Gold Wristwatch", icon:"⌚", productId:1}],
+   tip:"Let the gele be the star. Pick one statement accessory, like a rose gold watch, and keep the rest simple."},
+  {title:"Clean Casual", category:"kings", items:[{name:"Dark Jeans", icon:"👖"},{name:"White Sneakers", icon:"👟"}],
+   tip:"Dark, slim jeans with clean white sneakers works for almost any day out. Keep the sneakers spotless; that's the whole look."},
+  {title:"Traditional King", category:"kings", items:[{name:"Classic Agbada Set", icon:"🧥", productId:3},{name:"Men's Leather Loafers", icon:"👞", productId:4}],
+   tip:"Brown or black loafers keep agbada looking sharp. Match the shoe to the darkest colour in your embroidery."},
+  {title:"Smart Office", category:"kings", items:[{name:"Chinos", icon:"👔"},{name:"Leather Loafers", icon:"👞", productId:4}],
+   tip:"Rule of thumb: your belt should match your shoes. Brown loafers + brown belt with navy or beige chinos never fails."},
+  {title:"Lounge in Style", category:"unisex", items:[{name:"Joggers & Tee", icon:"🩳"},{name:"Wireless Earbuds", icon:"🎧", productId:5}],
+   tip:"Matching loungewear in one colour looks put-together, not lazy. Add clean sneakers and you can step out in it."},
+  {title:"Finishing Touch", category:"unisex", items:[{name:"Plain T-shirt", icon:"👕"},{name:"Smart Fitness Watch", icon:"⏱️", productId:8}],
+   tip:"A plain tee looks more expensive with one good accessory. A watch or simple chain is enough. Don't overdo it."},
+];
+
+/* =========================================================
    PAYMENT ACCOUNT (shown to customers)
    ========================================================= */
 const BANK = { bank:"PremiumTrust Bank", number:"0111321770", name:"Bukola Feyisola Ajiboye" };
-const CUSTOMER_EMAIL_DOMAIN = "customers.affordablesbybee.app"; // phone numbers become logins like 2348031234567@...
 
 /* ---------------- helpers ---------------- */
 const fmt = n => "₦" + Math.round(n||0).toLocaleString("en-NG");
@@ -428,67 +482,130 @@ function renderMB(){
 
 function renderAccount(){
   document.getElementById("accName").textContent = profile ? profile.name : "Guest Customer";
-  document.getElementById("accSub").textContent = profile ? "+" + profile.phone : "Sign in to use your MoneyBox";
+  document.getElementById("accSub").textContent = profile ? (profile.email || ("+" + profile.phone)) : "Sign in to use your MoneyBox";
   document.getElementById("av").textContent = profile ? profile.name.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase() : "🐝";
   document.getElementById("accAuth").innerHTML = user
     ? `<button class="btn ghost" onclick="logout()">Sign out</button>`
     : `<button class="btn" onclick="openAuth('signin')">Sign in</button><button class="btn ghost" onclick="openAuth('signup')">Create account</button>`;
 }
 
-function renderAll(){ renderProducts(); renderCart(); renderWish(); renderMB(); renderAccount(); }
+let pairCat = "all";
+function renderPairs(){
+  const list = PAIRINGS.filter(p=>pairCat==="all"||p.category===pairCat);
+  document.getElementById("pairList").innerHTML = list.map((p,i)=>{
+    const ids = p.items.map(it=>it.productId).filter(id=>PRODUCTS.find(x=>x.id===id));
+    const tile = it => { const pr = PRODUCTS.find(x=>x.id===it.productId);
+      return `<div class="it" ${pr?`onclick="openProduct(${pr.id})" style="cursor:pointer"`:""}><div class="im">${pr?imgTag(pr):(it.image?`<img src="${it.image}" alt="" onerror="this.replaceWith('${it.icon}')">`:it.icon)}</div><span>${esc(it.name)}</span></div>`; };
+    return `<div class="look"><div class="look-h"><b>${esc(p.title)}</b><span class="tag ${p.category}" style="position:static">${p.category.toUpperCase()}</span></div>
+      <div class="duo">${p.items.map(tile).join('<div class="plus">+</div>')}</div>
+      <div class="tip">💡 ${esc(p.tip)}</div>
+      ${ids.length?`<button class="btn" onclick="shopLook([${ids}])">🛍 Shop this look</button>`:""}</div>`;
+  }).join("") || `<div class="empty-cat">No tips here yet.</div>`;
+}
+function shopLook(ids){ ids.forEach(id=>cart[id]=(cart[id]||0)+1); store.set("cart",cart); renderAll(); toast(`Added ${ids.length} item${ids.length>1?"s":""} to cart 🛒`); }
+document.getElementById("pairChips").addEventListener("click", e=>{ const c=e.target.dataset.c; if(!c) return; pairCat=c; document.querySelectorAll("#pairChips button").forEach(b=>b.classList.toggle("on",b.dataset.c===c)); renderPairs(); });
 
-/* ---------------- auth ---------------- */
+function renderAll(){ renderPairs(); renderProducts(); renderCart(); renderWish(); renderMB(); renderAccount(); }
+
+/* ---------------- auth: Google + email/password ---------------- */
+const GOOGLE_SVG = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`;
 function openAuth(mode){
   if(!fbReady){ toast("Connecting… please try again in a moment"); return; }
   const su = mode==="signup";
   sheet(`<h2>${su?"Create your account":"Welcome back"}</h2>
-   <div class="tabs"><button class="${!su?'on':''}" onclick="openAuth('signin')">Sign in</button><button class="${su?'on':''}" onclick="openAuth('signup')">Create account</button></div>
+   <p class="desc" style="margin-bottom:12px">${su?"Join in seconds to start saving in your MoneyBox.":"Sign in to see your MoneyBox."}</p>
+   <button class="gbtn" id="gBtn" onclick="googleAuth()">${GOOGLE_SVG} Continue with Google</button>
+   <div class="or">or use your email</div>
+   <div class="tabs" style="margin-top:10px"><button class="${!su?'on':''}" onclick="openAuth('signin')">Sign in</button><button class="${su?'on':''}" onclick="openAuth('signup')">Create account</button></div>
    ${su?`<label class="fl">Full name</label><input class="field" id="aName" autocomplete="name" placeholder="e.g. Ada Obi">`:""}
-   <label class="fl">Phone number</label><input class="field" id="aPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08031234567">
+   <label class="fl">Email</label><input class="field" id="aEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com">
+   ${su?`<label class="fl">Phone / WhatsApp number</label><input class="field" id="aPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08031234567">`:""}
    <label class="fl">Password${su?" (at least 6 characters)":""}</label><input class="field" id="aPass" type="password" autocomplete="${su?'new-password':'current-password'}" placeholder="••••••">
+   ${!su?`<div style="text-align:right;margin-top:8px"><button class="link" onclick="forgotPass()">Forgot password?</button></div>`:""}
    <div class="err" id="aErr"></div>
-   <button class="btn" id="aBtn" onclick="doAuth(${su})">${su?"Create account":"Sign in"}</button>
-   ${!su?`<p class="desc" style="text-align:center;margin-top:12px;font-size:13px">Forgot your password? Contact us on WhatsApp and we'll help.</p>`:""}`);
+   <button class="btn" id="aBtn" onclick="doAuth(${su})">${su?"Create account":"Sign in"}</button>`);
+}
+const authMsg = c => c.includes("email-already-in-use") ? "This email already has an account. Please sign in (or use Continue with Google)."
+  : c.includes("invalid-credential")||c.includes("wrong-password")||c.includes("user-not-found") ? "Wrong email or password."
+  : c.includes("invalid-email") ? "That email address doesn't look right."
+  : c.includes("weak-password") ? "Password must be at least 6 characters."
+  : c.includes("too-many-requests") ? "Too many attempts. Please wait a few minutes."
+  : c.includes("popup-closed")||c.includes("cancelled-popup") ? "Google sign-in was closed. Please try again."
+  : c.includes("unauthorized-domain") ? "This website isn't allowed in Firebase yet (Authorized domains)."
+  : c.includes("operation-not-allowed") ? "This sign-in method isn't switched on in Firebase yet."
+  : c.includes("network") ? "Network problem. Check your connection." : "Something went wrong. Please try again.";
+async function googleAuth(){
+  const err = m => { const e=document.getElementById("aErr"); if(e) e.textContent = m; };
+  try{ await fb.signInWithPopup(fb.auth, new fb.GoogleAuthProvider()); closeSheet(); }
+  catch(e){
+    const c = e.code||"";
+    if(c.includes("popup-blocked")||c.includes("operation-not-supported")){ try{ await fb.signInWithRedirect(fb.auth, new fb.GoogleAuthProvider()); return; }catch(e2){ return err(authMsg(e2.code||"")); } }
+    err(authMsg(c));
+  }
 }
 async function doAuth(su){
   const err = m => document.getElementById("aErr").textContent = m;
-  const phone = normPhone(document.getElementById("aPhone").value), pass = document.getElementById("aPass").value;
+  const email = document.getElementById("aEmail").value.trim().toLowerCase(), pass = document.getElementById("aPass").value;
   const name = su ? document.getElementById("aName").value.trim().replace(/\s+/g," ") : "";
+  const phone = su ? normPhone(document.getElementById("aPhone").value) : "";
   if(su && name.length<3) return err("Please enter your full name");
-  if(phone.length!==13 || !phone.startsWith("234")) return err("Enter a valid Nigerian phone number");
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return err("Enter a valid email address");
+  if(su && (phone.length!==13 || !phone.startsWith("234"))) return err("Enter a valid Nigerian phone number");
   if(pass.length<6) return err("Password must be at least 6 characters");
   const btn = document.getElementById("aBtn"); btn.disabled = true; btn.textContent = "Please wait…";
-  const email = phone + "@" + CUSTOMER_EMAIL_DOMAIN;
   try{
     if(su){
+      pendingProfile = {name, phone};
       const cred = await fb.createUserWithEmailAndPassword(fb.auth, email, pass);
-      await fb.setDoc(fb.doc(fb.db,"users",cred.user.uid), {name, phone, balance:0, createdAt:fb.serverTimestamp()});
+      await saveProfile(cred.user, name, phone);
       toast(`Welcome, ${name.split(" ")[0]}! 👑`);
-    } else {
-      await fb.signInWithEmailAndPassword(fb.auth, email, pass);
-      toast("Signed in ✓");
-    }
+    } else { await fb.signInWithEmailAndPassword(fb.auth, email, pass); toast("Signed in ✓"); }
     closeSheet();
-  }catch(e){
-    btn.disabled = false; btn.textContent = su?"Create account":"Sign in";
-    const c = e.code||"";
-    err(c.includes("email-already-in-use") ? "This phone number already has an account. Please sign in."
-      : c.includes("invalid-credential")||c.includes("wrong-password")||c.includes("user-not-found") ? "Wrong phone number or password."
-      : c.includes("too-many-requests") ? "Too many attempts. Please wait a few minutes."
-      : c.includes("network") ? "Network problem. Check your connection." : "Something went wrong. Please try again.");
-  }
+  }catch(e){ btn.disabled=false; btn.textContent = su?"Create account":"Sign in"; err(authMsg(e.code||"")); }
+}
+async function forgotPass(){
+  const email = (document.getElementById("aEmail").value||"").trim();
+  const err = m => document.getElementById("aErr").textContent = m;
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return err("Type your email above first, then tap Forgot password.");
+  try{ await fb.sendPasswordResetEmail(fb.auth, email); err(""); toast("Reset link sent. Check your email (and spam) 📧"); }
+  catch(e){ err(authMsg(e.code||"")); }
+}
+let pendingProfile = null;
+async function saveProfile(u, name, phone){
+  await fb.setDoc(fb.doc(fb.db,"users",u.uid), {name, phone, email:(u.email||"").toLowerCase(), balance:0, createdAt:fb.serverTimestamp()});
+}
+function askProfile(){ // Google users: collect phone once
+  const g = user && user.displayName || "";
+  sheet(`<h2>One last step 👑</h2><p class="desc">Add your phone number so we can reach you about your orders and payments.</p>
+   <label class="fl">Full name</label><input class="field" id="pName" value="${esc(g)}" autocomplete="name">
+   <label class="fl">Phone / WhatsApp number</label><input class="field" id="pPhone" type="tel" inputmode="tel" placeholder="08031234567">
+   <div class="err" id="pErr"></div><button class="btn" id="pBtn" onclick="finishProfile()">Save and continue</button>
+   <button class="btn ghost" onclick="logout();closeSheet()">Cancel and sign out</button>`);
+}
+async function finishProfile(){
+  const name = document.getElementById("pName").value.trim().replace(/\s+/g," "), phone = normPhone(document.getElementById("pPhone").value);
+  const err = m => document.getElementById("pErr").textContent = m;
+  if(name.length<3) return err("Please enter your full name");
+  if(phone.length!==13 || !phone.startsWith("234")) return err("Enter a valid Nigerian phone number");
+  const b = document.getElementById("pBtn"); b.disabled = true; b.textContent = "Saving…";
+  try{ await saveProfile(user, name, phone); closeSheet(); toast(`Welcome, ${name.split(" ")[0]}! 👑`); }
+  catch(e){ b.disabled=false; b.textContent="Save and continue"; err("Couldn't save. Please try again."); }
 }
 function logout(){ fb.signOut(fb.auth); toast("Signed out"); }
 
 function onUser(u){
   unsubs.forEach(f=>f()); unsubs = []; user = u; profile = null; myRefs = []; myPays = [];
   if(u){
-    unsubs.push(fb.onSnapshot(fb.doc(fb.db,"users",u.uid), s => { profile = s.exists() ? s.data() : null; renderAll(); }));
+    let first = true;
+    unsubs.push(fb.onSnapshot(fb.doc(fb.db,"users",u.uid), s => {
+      profile = s.exists() ? s.data() : null;
+      if(!profile && first && !pendingProfile) askProfile();
+      first = false; renderAll(); }));
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"refs"), fb.where("uid","==",u.uid)), s => {
       myRefs = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); }));
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"payments"), fb.where("uid","==",u.uid)), s => {
       myPays = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); renderMB(); }));
-  }
+  } else pendingProfile = null;
   renderAll();
 }
 
@@ -496,6 +613,7 @@ function onUser(u){
 let chosenRef = "new";
 function openDeposit(){
   if(!user){ openAuth("signin"); return; }
+  if(!profile){ askProfile(); return; }
   chosenRef = myRefs.length ? myRefs[0].id : "new";
   const opts = myRefs.slice(0,5).map(r=>`<div class="opt ${chosenRef===r.id?'on':''}" data-r="${r.id}" onclick="pickRef('${r.id}')"><span class="rd"></span><span><b>${r.id}</b><small>Created ${niceDate(r.createdAt)}</small></span></div>`).join("");
   sheet(`<h2>Add to MoneyBox</h2><p class="desc">Choose an amount or type your own.</p>
@@ -598,6 +716,8 @@ try{
   window.fb = { auth, db,
     onAuthStateChanged:A.onAuthStateChanged, createUserWithEmailAndPassword:A.createUserWithEmailAndPassword,
     signInWithEmailAndPassword:A.signInWithEmailAndPassword, signOut:A.signOut,
+    GoogleAuthProvider:A.GoogleAuthProvider, signInWithPopup:A.signInWithPopup, signInWithRedirect:A.signInWithRedirect,
+    sendPasswordResetEmail:A.sendPasswordResetEmail,
     doc:F.doc, setDoc:F.setDoc, addDoc:F.addDoc, collection:F.collection, query:F.query, where:F.where,
     onSnapshot:F.onSnapshot, runTransaction:F.runTransaction, serverTimestamp:F.serverTimestamp };
   window.dispatchEvent(new Event("fb-ready"));
