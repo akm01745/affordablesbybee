@@ -4,16 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Affordables by Bee</title>
+<meta name="description" content="Shop shoes, bags and accessories for Kings, Queens and everyone. Save with the Bee MoneyBox and pay small-small on Affordables by Bee.">
 <meta name="theme-color" content="#2E3C87">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Affordables by Bee">
+<meta property="og:description" content="Shop Kings, Queens and Unisex. Save with the Bee MoneyBox.">
+<meta property="og:image" content="images/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232E3C87'/><text y='72' x='50' font-size='62' text-anchor='middle'>🐝</text></svg>">
 <style>
 :root{
   --blue:#2E3C87; --blue-d:#1F2A66; --blue-l:#E9ECF8; --cream:#F8F9FE;
   --gold:#D4A537; --gold-l:#FFF6DE; --queen:#B5367A; --queen-l:#FCE9F2;
   --king:#2E3C87; --king-l:#E6EAFA; --uni:#11806A; --uni-l:#E2F5F0;
+  --red:#E5383B; --green:#1FA855;
   --ink:#151A33; --muted:#6B7090; --line:#E6E8F2; --white:#fff;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#DDE1EF;color:var(--ink)}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#DDE1EF;color:var(--ink);-webkit-text-size-adjust:100%}
 .app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:84px}
 button{font:inherit;border:none;background:none;cursor:pointer;color:inherit}
 .page{display:none;animation:fade .25s ease}
@@ -26,8 +37,7 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .topbar{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;position:sticky;top:0;background:var(--cream);z-index:5}
 .topbar img{width:40px;height:40px;border-radius:10px;object-fit:contain;background:#fff;padding:3px;border:1px solid var(--line)}
 .search{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;box-shadow:0 2px 8px rgba(46,60,135,.06)}
-.search input{border:none;outline:none;flex:1;font-size:15px;background:none}
-.search svg{flex:none}
+.search input{border:none;outline:none;flex:1;font-size:15px;background:none;min-width:0}
 
 /* banner carousel */
 .carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 16px 4px;scrollbar-width:none}
@@ -69,20 +79,32 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 
 /* products */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px}
-.card{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 10px rgba(46,60,135,.05);cursor:pointer}
+.card{background:#fff;border-radius:18px;border:1px solid var(--line);overflow:hidden;box-shadow:0 2px 10px rgba(46,60,135,.05);cursor:pointer;position:relative}
 .card .img{aspect-ratio:1/1;background:#F3F4FA;display:grid;place-items:center;position:relative;overflow:hidden}
 .card .img img{width:100%;height:100%;object-fit:cover}
 .card .ph{font-size:54px}
 .card .tag{position:absolute;left:8px;top:8px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:10px;color:#fff}
 .tag.queens{background:var(--queen)} .tag.kings{background:var(--king)} .tag.unisex{background:var(--uni)}
+.card .stock{position:absolute;right:8px;top:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.95)}
+.stock.out{background:#FDECEC;color:var(--red)} .stock.low{background:var(--gold-l);color:#8A6512} .stock.in{display:none}
 .card .info{padding:10px 12px 12px}
 .card h5{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.card .sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;min-height:14px}
 .card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
 .price{font-weight:800;font-size:15px}
+.price s{color:var(--muted);font-weight:400;font-size:11px;margin-right:4px}
 .heart svg{width:24px;height:24px;stroke:var(--blue);fill:none;stroke-width:2}
 .heart.on svg{fill:var(--blue)}
 .empty-cat{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
+
+/* recently viewed */
+.recently{padding:0 16px;margin-top:8px}
+.recently .scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.recently .scroll::-webkit-scrollbar{display:none}
+.recently .it{flex:none;width:96px;cursor:pointer}
+.recently .it .im{aspect-ratio:1/1;border-radius:12px;background:#F3F4FA;overflow:hidden;display:grid;place-items:center;font-size:34px;border:1px solid var(--line)}
+.recently .it .im img{width:100%;height:100%;object-fit:cover}
+.recently .it span{display:block;font-size:11px;margin-top:5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* bottom nav */
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:20}
@@ -104,14 +126,18 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .citem .th img{width:100%;height:100%;object-fit:cover}
 .citem .meta{flex:1;min-width:0}
 .citem .meta b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.qty{display:flex;align-items:center;gap:10px;margin-top:6px}
-.qty button{width:26px;height:26px;border-radius:8px;background:var(--blue-l);color:var(--blue);font-weight:800}
+.citem .meta small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.qty{display:flex;align-items:center;gap:14px;margin-top:6px}
+.qty button{width:40px;height:40px;border-radius:12px;background:var(--blue-l);color:var(--blue);font-weight:800;font-size:20px}
+.qty button:disabled{opacity:.4;cursor:not-allowed}
 .summary{margin:16px;background:#fff;border-radius:18px;border:1px solid var(--line);padding:16px}
 .summary .r{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;color:var(--muted)}
 .summary .r.t{color:var(--ink);font-weight:800;font-size:16px;border-top:1px dashed var(--line);padding-top:10px}
-.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;margin-top:10px;text-align:center}
+.btn{display:block;width:100%;padding:14px;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;margin-top:10px;text-align:center;border:none}
 .btn.gold{background:var(--gold);color:#2A1F05}
 .btn.ghost{background:var(--blue-l);color:var(--blue)}
+.btn.wa{background:var(--green);color:#fff}
+.btn:disabled{opacity:.6;cursor:wait}
 
 /* moneybox */
 .mb-hero{margin:4px 16px 0;border-radius:24px;padding:20px;background:radial-gradient(circle at 85% 15%,rgba(212,165,55,.45),transparent 45%),linear-gradient(140deg,var(--blue-d),var(--blue) 60%,#4253B5);color:#fff;position:relative;overflow:hidden}
@@ -134,7 +160,7 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .step .n{width:30px;height:30px;border-radius:50%;background:var(--blue-l);color:var(--blue);font-weight:800;display:grid;place-items:center;flex:none;font-size:14px}
 .step p{font-size:14px}
 .hist{margin:6px 16px 20px}
-.hist .h{display:flex;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;font-size:14px}
+.hist .h{display:flex;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;font-size:14px;cursor:pointer}
 .hist .h small{display:block;color:var(--muted);font-size:12px}
 .hist .h .amt{font-weight:800;color:var(--uni)}
 
@@ -157,23 +183,35 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .mi span small{display:block;font-size:12px;color:var(--muted)}
 .mi i{color:#B5B9CF;font-style:normal;font-size:18px}
 
+/* orders */
+.ord{margin:0 16px 10px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;cursor:pointer}
+.ord .h{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
+.ord .h b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;letter-spacing:.5px;color:var(--blue-d)}
+.ord .h span{font-size:12px;color:var(--muted)}
+.ord .its{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+.ord .f{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.ord .f b{font-size:15px}
+.ord .steps{background:var(--cream);padding:8px 10px;border-radius:10px;font-size:12px;color:var(--muted);margin-top:8px}
+
 /* sheet / modal */
 .sheet-bg{position:fixed;inset:0;background:rgba(15,20,45,.45);display:none;z-index:40}
+.sheet-bg.open{display:block}
 .sheet{position:fixed;left:50%;transform:translate(-50%,100%);bottom:0;width:100%;max-width:480px;background:#fff;border-radius:24px 24px 0 0;padding:10px 18px 24px;z-index:41;transition:transform .28s ease;max-height:88vh;overflow:auto}
 .sheet.open{transform:translate(-50%,0)}
 .grab{width:42px;height:5px;border-radius:3px;background:#D5D8E6;margin:4px auto 14px}
-.pd-img{aspect-ratio:1/1;border-radius:18px;background:#F3F4FA;display:grid;place-items:center;font-size:110px;overflow:hidden}
+.pd-img{aspect-ratio:1/1;border-radius:18px;background:#F3F4FA;display:grid;place-items:center;font-size:110px;overflow:hidden;cursor:zoom-in}
 .pd-img img{width:100%;height:100%;object-fit:cover}
 .sheet h2{font-size:20px;margin:14px 0 4px}
 .sheet .desc{color:var(--muted);font-size:14px;line-height:1.5}
 .sheet .big{font-size:24px;font-weight:800;margin:10px 0}
 .plan{background:var(--blue-l);border-radius:14px;padding:12px 14px;font-size:13.5px;color:var(--blue-d)}
 .amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
-.amts button{border:1.5px solid var(--line);border-radius:12px;padding:12px 4px;font-weight:700;font-size:14px}
+.amts button{border:1.5px solid var(--line);border-radius:12px;padding:12px 4px;font-weight:700;font-size:14px;background:#fff}
 .amts button.on{border-color:var(--blue);background:var(--blue-l);color:var(--blue)}
-.field{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none}
+.field{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none;background:#fff}
 .field:focus{border-color:var(--blue)}
-.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;padding:10px 16px;border-radius:12px;opacity:0;transition:.25s;z-index:60;pointer-events:none;white-space:nowrap}
+textarea.field{min-height:80px;resize:vertical;font-family:inherit}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;font-size:14px;padding:10px 16px;border-radius:12px;opacity:0;transition:.25s;z-index:60;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .refbox{margin:14px 0;border-radius:18px;padding:16px;text-align:center;background:linear-gradient(140deg,var(--blue-d),var(--blue));color:#fff}
 .refbox small{font-size:11px;letter-spacing:1px;opacity:.8}
@@ -183,15 +221,14 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .pr{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
 .pr:last-child{border:none}
 .pr span{color:var(--muted);flex:none;width:118px}
-.pr b{flex:1;text-align:right}
+.pr b{flex:1;text-align:right;word-break:break-all}
 .pr button{background:var(--blue-l);color:var(--blue);font-weight:700;font-size:12px;padding:5px 10px;border-radius:10px}
-.btn:disabled{opacity:.6}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--blue-l);border-radius:12px;padding:4px;margin:6px 0 14px}
 .tabs button{padding:10px;border-radius:9px;font-weight:700;color:var(--blue)}
 .tabs button.on{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .fl{font-size:13px;color:var(--muted);margin:10px 0 5px;display:block}
 .err{color:#C62828;font-size:13px;margin-top:8px;min-height:16px}
-.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fff}
 .opt.on{border-color:var(--blue);background:var(--blue-l)}
 .opt .rd{width:20px;height:20px;border-radius:50%;border:2px solid #B5B9CF;flex:none;display:grid;place-items:center}
 .opt.on .rd{border-color:var(--blue)} .opt.on .rd:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--blue)}
@@ -210,7 +247,6 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .look .it .im{aspect-ratio:1/1;border-radius:14px;background:#F3F4FA;display:grid;place-items:center;font-size:44px;overflow:hidden}
 .look .it .im img{width:100%;height:100%;object-fit:cover}
 .look .it span{display:block;font-size:12.5px;font-weight:600;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.look .it .im .ph{font-size:44px;display:inline;margin:0}
 .look-h .tag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:10px;color:#fff}
 .look .plus{flex:none;width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;font-weight:800;display:grid;place-items:center;font-size:18px}
 .look .tip{margin-top:12px;background:var(--blue-l);border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.45;color:var(--blue-d)}
@@ -219,31 +255,27 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin:14px 0 2px}
 .or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
 .link{color:var(--blue);font-weight:700;font-size:13px;text-decoration:underline;background:none}
-.preview-flag{background:var(--gold);color:#2A1F05;text-align:center;font-size:12px;font-weight:700;padding:6px}
-
-/* ===== updates ===== */
-.card .tag{left:auto;right:8px}
-.card .img:not(.ld){background:linear-gradient(90deg,#F3F4FA 25%,#E4E7F4 50%,#F3F4FA 75%);background-size:200% 100%;animation:shim 1.3s linear infinite}
-@keyframes shim{to{background-position:-200% 0}}
-.heart{width:44px;height:44px;display:grid;place-items:center;margin:-10px -8px -10px 0}
-.heart svg{width:26px;height:26px}
-.qty{gap:14px}
-.qty button{width:40px;height:40px;font-size:20px;border-radius:12px}
-.citem .meta small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .sizes{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
 .sizes button{min-width:46px;height:46px;border:1.5px solid var(--line);border-radius:12px;font-weight:700;font-size:15px;background:#fff}
 .sizes button.on{border-color:var(--blue);background:var(--blue);color:#fff}
+.sizes button:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
 .sizes.shake{animation:shake .35s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
-.btn.wa{background:#1FA855;color:#fff}
-.pd-img{cursor:zoom-in}
 .zoom{position:fixed;inset:0;background:rgba(10,12,30,.94);z-index:70;display:none}
 .zoom.open{display:block}
-.zin{width:100%;height:100%;overflow:auto;display:flex;-webkit-overflow-scrolling:touch}
+.zin{width:100%;height:100%;overflow:auto;display:grid;place-items:center;-webkit-overflow-scrolling:touch}
 .zin img{width:100%;max-width:640px;height:auto;margin:auto;transition:width .2s;cursor:zoom-in}
 .zin.big img{width:240%;max-width:none;cursor:zoom-out}
 .zx{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:22px}
 .zh{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;color:#fff;opacity:.75;font-size:13px;pointer-events:none}
+.fbstat{font-size:12px;color:var(--muted);text-align:center;padding:8px;background:var(--gold-l);color:#6A4F0E;border-radius:10px;margin:8px 16px}
+.sizeguide{margin:8px 0 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.sizeguide table{width:100%;border-collapse:collapse;font-size:13px}
+.sizeguide th,.sizeguide td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center}
+.sizeguide th{background:var(--blue-l);color:var(--blue)}
+.sizeguide td:first-child{font-weight:700}
+.shimmer{background:linear-gradient(90deg,#F3F4FA 25%,#E4E7F4 50%,#F3F4FA 75%);background-size:200% 100%;animation:shim 1.3s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
 </style>
 </head>
 <body>
@@ -252,41 +284,50 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 <!-- ============ SHOP ============ -->
 <section class="page active" id="p-shop">
   <div class="topbar">
-    <img src="data:image/jpeg;base64,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" alt="Affordables by Bee">
+    <img src="data:image/jpeg;base64,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" alt="Affordables by Bee">
     <label class="search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E3C87" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" placeholder="Search shoes, bags…" oninput="renderProducts()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E3C87" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search shoes, bags…" aria-label="Search products">
     </label>
   </div>
 
-  <div class="carousel" id="carousel">
-    <div class="slide s1"><h3>Christmas Royal Sale</h3><p>Gifts for your Kings &amp; Queens, pay small small.</p><span class="cta" onclick="go('shop');pickCat('all')">Shop now →</span><div class="art">🎁</div></div>
-    <div class="slide s2"><h3>Save to buy what you deserve</h3><p>Fill your MoneyBox, then spend it on anything here.</p><span class="cta" onclick="go('moneybox')">Open MoneyBox →</span><div class="art">👑</div></div>
-    <div class="slide s3"><h3>Unisex Picks</h3><p>Made for everyone, priced for everyone.</p><span class="cta" onclick="pickCat('unisex')">Explore →</span><div class="art">✨</div></div>
+  <div class="carousel" id="carousel" aria-label="Promotions">
+    <div class="slide s1"><h3>Christmas Royal Sale</h3><p>Gifts for your Kings &amp; Queens, pay small small.</p><span class="cta" role="button" onclick="go('shop');pickCat('all')">Shop now →</span><div class="art" aria-hidden="true">🎁</div></div>
+    <div class="slide s2"><h3>Save to buy what you deserve</h3><p>Fill your MoneyBox, then spend it on anything here.</p><span class="cta" role="button" onclick="go('moneybox')">Open MoneyBox →</span><div class="art" aria-hidden="true">👑</div></div>
+    <div class="slide s3"><h3>Unisex Picks</h3><p>Made for everyone, priced for everyone.</p><span class="cta" role="button" onclick="pickCat('unisex')">Explore →</span><div class="art" aria-hidden="true">✨</div></div>
   </div>
-  <div class="dots" id="dots"><span class="on"></span><span></span><span></span></div>
+  <div class="dots" id="dots" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
 
   <div class="label"><span class="chip">Shop by Royalty</span></div>
   <div class="royals">
-    <div class="royal q" data-cat="queens" onclick="pickCat('queens')">
-      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#B5367A"/><circle cx="28" cy="31" r="9" fill="none" stroke="#B5367A" stroke-width="3.5"/><path d="M28 40v11M22.5 46h11" stroke="#B5367A" stroke-width="3.5" stroke-linecap="round"/></svg></div><b>QUEENS</b><small>For her</small>
+    <div class="royal q" data-cat="queens" tabindex="0" role="button" onclick="pickCat('queens')" onkeydown="if(event.key==='Enter'||event.key===' ')pickCat('queens')">
+      <div class="emb" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#B5367A"/><circle cx="28" cy="31" r="9" fill="none" stroke="#B5367A" stroke-width="3.5"/><path d="M28 40v11M22.5 46h11" stroke="#B5367A" stroke-width="3.5" stroke-linecap="round"/></svg></div><b>QUEENS</b><small>For her</small>
     </div>
-    <div class="royal k" data-cat="kings" onclick="pickCat('kings')">
-      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#2E3C87"/><circle cx="24" cy="38" r="9" fill="none" stroke="#2E3C87" stroke-width="3.5"/><path d="M30.5 31.5 39 23M32 23h7v7" stroke="#2E3C87" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>KINGS</b><small>For him</small>
+    <div class="royal k" data-cat="kings" tabindex="0" role="button" onclick="pickCat('kings')" onkeydown="if(event.key==='Enter'||event.key===' ')pickCat('kings')">
+      <div class="emb" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#2E3C87"/><circle cx="24" cy="38" r="9" fill="none" stroke="#2E3C87" stroke-width="3.5"/><path d="M30.5 31.5 39 23M32 23h7v7" stroke="#2E3C87" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>KINGS</b><small>For him</small>
     </div>
-    <div class="royal u" data-cat="unisex" onclick="pickCat('unisex')">
-      <div class="emb"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#11806A"/><circle cx="28" cy="34" r="8" fill="none" stroke="#11806A" stroke-width="3.5"/><path d="M28 42v10M23.5 47.5h9" stroke="#11806A" stroke-width="3.5" stroke-linecap="round"/><path d="M33.7 28.3 40 22M35 22h5v5" stroke="#11806A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>UNISEX</b><small>For all</small>
+    <div class="royal u" data-cat="unisex" tabindex="0" role="button" onclick="pickCat('unisex')" onkeydown="if(event.key==='Enter'||event.key===' ')pickCat('unisex')">
+      <div class="emb" aria-hidden="true"><svg width="56" height="56" viewBox="0 0 56 56"><path d="M16 15 L19 8 L24 13 L28 5 L32 13 L37 8 L40 15 Z" fill="#D4A537" stroke="#B8862A" stroke-width="1" stroke-linejoin="round"/><rect x="16" y="15" width="24" height="3" rx="1" fill="#D4A537"/><circle cx="28" cy="5" r="1.6" fill="#11806A"/><circle cx="28" cy="34" r="8" fill="none" stroke="#11806A" stroke-width="3.5"/><path d="M28 42v10M23.5 47.5h9" stroke="#11806A" stroke-width="3.5" stroke-linecap="round"/><path d="M33.7 28.3 40 22M35 22h5v5" stroke="#11806A" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><b>UNISEX</b><small>For all</small>
     </div>
   </div>
 
-  <div class="promo" onclick="go('moneybox')">
-    <div class="ico">🐝</div>
+  <div class="promo" role="button" tabindex="0" onclick="go('moneybox')" onkeydown="if(event.key==='Enter')go('moneybox')">
+    <div class="ico" aria-hidden="true">🐝</div>
     <div><h4>Bee MoneyBox</h4><p>Save towards Christmas, then shop with it. Save to buy what you deserve.</p></div>
   </div>
 
   <div class="label"><span class="chip" id="catTitle">All products</span><a onclick="pickCat('all')">See all</a></div>
-  <div class="chips" id="sortChips"><button data-s="def" class="on">Default</button><button data-s="low">Price: Low → High</button><button data-s="high">Price: High → Low</button></div>
+  <div class="chips" id="sortChips" aria-label="Sort and filter">
+    <button data-s="def" class="on">Default</button>
+    <button data-s="low">Price ↑</button>
+    <button data-s="high">Price ↓</button>
+    <button data-s="stock">In stock</button>
+  </div>
   <div class="grid" id="grid"></div>
+  <div id="recentlySection" class="hide">
+    <div class="label"><span class="chip">Recently viewed</span></div>
+    <div class="recently"><div class="scroll" id="recentScroll"></div></div>
+  </div>
   <div style="height:20px"></div>
 </section>
 
@@ -300,10 +341,10 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
 <section class="page" id="p-moneybox">
   <h1 class="title">Bee MoneyBox</h1>
   <div class="mb-hero">
-    <div class="xmas">🎄</div>
+    <div class="xmas" aria-hidden="true">🎄</div>
     <small>MoneyBox balance</small>
     <div class="bal" id="mbBal">₦0</div>
-    <div class="hint">Spend it on anything in the store</div>
+    <div class="hint" id="mbHint">Spend it on anything in the store</div>
     <div class="goal">
       <div class="gt"><span id="goalName">Christmas goal</span><span id="goalPct">0%</span></div>
       <div class="bar"><i id="goalBar" style="width:0"></i></div>
@@ -311,7 +352,7 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
   </div>
   <div class="mb-actions" id="mbActions"></div>
   <div class="tagline">Save to buy what <span>you deserve</span> 👑</div>
-  <div class="note"><span>⚠️</span><span><b>Not refundable as cash.</b> Money saved in your MoneyBox can only be used to buy items on Affordables by Bee.</span></div>
+  <div class="note"><span aria-hidden="true">⚠️</span><span><b>Not refundable as cash.</b> Money saved in your MoneyBox can only be used to buy items on Affordables by Bee.</span></div>
   <div class="steps">
     <div class="step"><div class="n">1</div><p>Add any amount, whenever you like</p></div>
     <div class="step"><div class="n">2</div><p>Watch your balance grow towards your goal</p></div>
@@ -337,6 +378,12 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
   <div id="wlBody"></div>
 </section>
 
+<!-- ============ ORDERS ============ -->
+<section class="page" id="p-orders">
+  <h1 class="title">My Orders</h1>
+  <div id="ordersBody"></div>
+</section>
+
 <!-- ============ ACCOUNT ============ -->
 <section class="page" id="p-account">
   <div class="acc-head"><h1>My Bee Profile</h1></div>
@@ -345,163 +392,191 @@ h1.title{font-size:22px;font-weight:700;padding:22px 16px 14px}
     <div><b id="accName">Guest Customer</b><p id="accSub">Sign in to use your MoneyBox</p><span class="pill">👑 Royal Member</span></div>
   </div>
   <div class="quick">
-    <button onclick="go('moneybox')"><span class="qi" style="background:var(--gold-l)">🐝</span>MoneyBox</button>
-    <button onclick="toast('Refer & Earn: coming soon')"><span class="qi" style="background:var(--uni-l)">🎁</span>Refer &amp; Earn</button>
+    <button onclick="go('moneybox')"><span class="qi" style="background:var(--gold-l)" aria-hidden="true">🐝</span>MoneyBox</button>
+    <button onclick="go('orders')"><span class="qi" style="background:var(--blue-l)" aria-hidden="true">📦</span>My Orders</button>
   </div>
   <div class="menu">
-    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Edit Profile</span><i>›</i></button>
-    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Delivery Addresses<small>Manage delivery addresses</small></span><i>›</i></button>
-    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Order History</span><i>›</i></button>
-    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><span>Payment Methods</span><i>›</i></button>
-    <button class="mi" onclick="openWA()"><svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg><span>Contact us on WhatsApp</span><i>›</i></button>
-    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Terms &amp; Conditions</span><i>›</i></button>
+    <button class="mi" onclick="toast('Edit profile: coming soon')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Edit Profile</span><i>›</i></button>
+    <button class="mi" onclick="openAddresses()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Delivery Addresses<small>Manage delivery addresses</small></span><i>›</i></button>
+    <button class="mi" onclick="go('orders')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Order History</span><i>›</i></button>
+    <button class="mi" onclick="toast('Coming soon')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><span>Payment Methods</span><i>›</i></button>
+    <button class="mi" onclick="openWA()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12z"/></svg><span>Contact us on WhatsApp</span><i>›</i></button>
+    <button class="mi" onclick="toast('Terms: coming soon')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg><span>Terms &amp; Conditions</span><i>›</i></button>
   </div>
   <div class="pad" id="accAuth" style="padding-bottom:20px"></div>
 </section>
 
 <!-- bottom nav -->
-<nav class="nav">
-  <button data-p="shop" class="on" onclick="go('shop')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16l1 5a3 3 0 0 1-5 2 3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-5-2l1-5zm1 9.5V20h5v-4h4v4h5v-6.5a4.6 4.6 0 0 1-3-.6 4.6 4.6 0 0 1-4 .5 4.6 4.6 0 0 1-4-.5 4.6 4.6 0 0 1-3 .6z"/></svg>Shop</button>
-  <button data-p="cart" onclick="go('cart')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM1 2h3.3l.9 2H21l-3.6 7.5a2 2 0 0 1-1.8 1.1H8.1l-1 1.9h12v2H5l2.1-4L3.6 4H1z"/></svg>Cart<span class="badge" id="cartBadge" style="display:none">0</span></button>
-  <button data-p="pair" class="mb" onclick="go('pair')"><span class="bub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 6a2 2 0 1 1 2 2c-1 0-2 .7-2 1.8V10"/><path d="M12 10 3 16.5c-.8.6-.4 1.5.5 1.5h17c.9 0 1.3-.9.5-1.5L12 10z"/></svg></span>Pair It</button>
-  <button data-p="wishlist" onclick="go('wishlist')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg>Wishlist</button>
-  <button data-p="account" onclick="go('account')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
+<nav class="nav" aria-label="Main">
+  <button data-p="shop" class="on" onclick="go('shop')" aria-label="Shop"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16l1 5a3 3 0 0 1-5 2 3 3 0 0 1-4 0 3 3 0 0 1-4 0 3 3 0 0 1-5-2l1-5zm1 9.5V20h5v-4h4v4h5v-6.5a4.6 4.6 0 0 1-3-.6 4.6 4.6 0 0 1-4 .5 4.6 4.6 0 0 1-4-.5 4.6 4.6 0 0 1-3 .6z"/></svg>Shop</button>
+  <button data-p="cart" onclick="go('cart')" aria-label="Cart"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM1 2h3.3l.9 2H21l-3.6 7.5a2 2 0 0 1-1.8 1.1H8.1l-1 1.9h12v2H5l2.1-4L3.6 4H1z"/></svg>Cart<span class="badge" id="cartBadge" style="display:none">0</span></button>
+  <button data-p="pair" class="mb" onclick="go('pair')" aria-label="Pair It"><span class="bub" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 6a2 2 0 1 1 2 2c-1 0-2 .7-2 1.8V10"/><path d="M12 10 3 16.5c-.8.6-.4 1.5.5 1.5h17c.9 0 1.3-.9.5-1.5L12 10z"/></svg></span>Pair It</button>
+  <button data-p="wishlist" onclick="go('wishlist')" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg>Wishlist</button>
+  <button data-p="account" onclick="go('account')" aria-label="Account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Account</button>
 </nav>
 
-<div class="sheet-bg" id="bg" onclick="closeSheet()"></div>
-<div class="sheet" id="sheet"><div class="grab"></div><div id="sheetBody"></div></div>
-<div class="zoom" id="zoom"><div class="zin" id="zin"><img id="zimg" alt="" onclick="document.getElementById('zin').classList.toggle('big')"></div><button class="zx" aria-label="Close" onclick="closeZoom()">✕</button><div class="zh">Tap the photo to zoom in or out</div></div>
-<div class="toast" id="toast"></div>
+<div class="sheet-bg" id="bg" onclick="closeSheet()" role="presentation"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Detail"><div class="grab" aria-hidden="true"></div><div id="sheetBody"></div></div>
+<div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Image zoom"><div class="zin" id="zin"><img id="zimg" alt="" onclick="document.getElementById('zin').classList.toggle('big')"></div><button class="zx" aria-label="Close zoom" onclick="closeZoom()">✕</button><div class="zh">Tap the photo to zoom in or out</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
 <script>
-/* =========================================================
-   PRODUCTS: this is the only part you edit to add items.
-   Put the photo in the images/ folder and write its name
-   in "image". If the photo is missing, an icon shows instead.
-   category: "queens" | "kings" | "unisex"
-   ========================================================= */
+/* ============================================================
+   PRODUCTS — edit here to add items. image lives in images/.
+   Optional fields: stock (number; default in stock), oldPrice.
+   ============================================================ */
 const SIZES = { queens:["36","37","38","39","40","41","42"], kings:["40","41","42","43","44","45","46"] };
+const SIZE_GUIDE = [
+  {cat:"queens", rows:[["EU","36","37","38","39","40","41","42"],["UK","3","4","5","6","7","8","9"],["US","5","6","7","8","9","10","11"],["Foot (cm)","22.5","23","23.5","24","24.5","25","25.5"]]},
+  {cat:"kings",  rows:[["EU","40","41","42","43","44","45","46"],["UK","6","7","8","9","10","11","12"],["US","7","8","9","10","11","12","13"],["Foot (cm)","25","25.5","26","26.5","27","27.5","28"]]}
+];
 const PRODUCTS = [
-  // Queens (women) -- shoes need a size
-  {id:1, name:"Sandals Heels",   sub:"Women's strappy sandal heel", price:25500, category:"queens", image:"images/sandals-heel.jpg",  icon:"👡", shoe:true},
-  {id:2, name:"Court Shoe",      sub:"Women's classic court shoe",  price:27000, category:"queens", image:"images/court-shoe.jpg",    icon:"👠", shoe:true},
-  {id:3, name:"Slippers Heels",  sub:"Women's heeled slippers",     price:18000, category:"queens", image:"images/slippers-heel.jpg", icon:"👡", shoe:true},
-  {id:4, name:"Slingback Heel",  sub:"Women's slingback heel",      price:19500, category:"queens", image:"images/slingback-heel.jpg",icon:"👠", shoe:true},
-  {id:5, name:"Leather Handbag", sub:"Photo coming soon",           price:45000, category:"queens", image:"images/handbag.jpg",       icon:"👜"},
-  {id:6, name:"Gele & Ipele Set",sub:"Aso-oke, ready to tie",       price:27500, category:"queens", image:"images/gele.jpg",          icon:"👑"},
-  // Kings (men)
-  {id:7, name:"Men Loafers",       sub:"Men's slipper loafer",      price:24000, category:"kings", image:"images/men-loafers.jpg",        icon:"👞", shoe:true},
-  {id:8, name:"Men Brown Loafers", sub:"Men's leather loafer",      price:27000, category:"kings", image:"images/men-brown-loafers.jpg",  icon:"👞", shoe:true},
-  {id:9, name:"Men Office Shoes",  sub:"Men's dress shoe",          price:32000, category:"kings", image:"images/men-office-shoes.jpg",   icon:"👞", shoe:true},
-  {id:10,name:"Men Sandals",       sub:"Men's leather sandal",      price:17000, category:"kings", image:"images/men-sandals.jpg",        icon:"🩴", shoe:true},
-  // Unisex: intentionally empty for now
+  {id:1, name:"Sandals Heels",   sub:"Women's strappy sandal heel", price:25500, category:"queens", image:"images/sandals-heel.jpg",  icon:"👡", shoe:true, stock:8},
+  {id:2, name:"Court Shoe",      sub:"Women's classic court shoe",  price:27000, category:"queens", image:"images/court-shoe.jpg",    icon:"👠", shoe:true, stock:5},
+  {id:3, name:"Slippers Heels",  sub:"Women's heeled slippers",     price:18000, category:"queens", image:"images/slippers-heel.jpg", icon:"👡", shoe:true, stock:3, oldPrice:22000},
+  {id:4, name:"Slingback Heel",  sub:"Women's slingback heel",      price:19500, category:"queens", image:"images/slingback-heel.jpg",icon:"👠", shoe:true, stock:6},
+  {id:5, name:"Leather Handbag", sub:"Women's leather handbag",     price:45000, category:"queens", image:"images/handbag.jpg",       icon:"👜", stock:4},
+  {id:6, name:"Gele & Ipele Set",sub:"Aso-oke, ready to tie",       price:27500, category:"queens", image:"images/gele.jpg",          icon:"👑", stock:10},
+  {id:7, name:"Men Loafers",       sub:"Men's slipper loafer",      price:24000, category:"kings", image:"images/men-loafers.jpg",        icon:"👞", shoe:true, stock:7},
+  {id:8, name:"Men Brown Loafers", sub:"Men's leather loafer",      price:27000, category:"kings", image:"images/men-brown-loafers.jpg",  icon:"👞", shoe:true, stock:5},
+  {id:9, name:"Men Office Shoes",  sub:"Men's dress shoe",          price:32000, category:"kings", image:"images/men-office-shoes.jpg",   icon:"👞", shoe:true, stock:4},
+  {id:10,name:"Men Sandals",       sub:"Men's leather sandal",      price:17000, category:"kings", image:"images/men-sandals.jpg",        icon:"🩴", shoe:true, stock:0},
 ];
 
-/* =========================================================
-   PAIR IT: style tips. Add a look by copying one block.
-   items: what goes together (icon shows if no photo).
-   productId: link to a product above so "Shop this look" adds it to cart.
-   ========================================================= */
+/* ============================================================
+   PAIR IT
+   ============================================================ */
 const PAIRINGS = [
-  {title:"Evening Glam", category:"queens", items:[{name:"Slippers Heels", icon:"👡", productId:3},{name:"Clutch Bag", icon:"👜"}],
-   tip:"Match the metal: embellished or metallic heels look best with a bag that has the same finish. Keep the bag smaller than your outfit is loud."},
-  {title:"Weekend Chic", category:"queens", items:[{name:"High-waist Jeans", icon:"👖"},{name:"Sandals Heels", icon:"👡", productId:1}],
-   tip:"Cuffed or ankle-length jeans show off a strappy heel and make your legs look longer. Gold or nude straps go with any wash."},
-  {title:"Office Queen", category:"queens", items:[{name:"Pencil Skirt", icon:"👗"},{name:"Court Shoe", icon:"👠", productId:2}],
-   tip:"A black court shoe is the safest heel for work. Keep the heel comfortable and the skirt at knee length for a sharp, easy look."},
-  {title:"Owambe Queen", category:"queens", items:[{name:"Gele & Ipele Set", icon:"👑", productId:6},{name:"Slingback Heel", icon:"👠", productId:4}],
-   tip:"Let the gele be the star. A nude slingback keeps the outfit balanced and is easy to dance in."},
-  {title:"Clean Casual", category:"kings", items:[{name:"Dark Jeans", icon:"👖"},{name:"Men Brown Loafers", icon:"👞", productId:8}],
-   tip:"Dark, slim jeans with brown loafers work for almost any day out. Wear them with or without socks and keep the leather clean."},
-  {title:"Smart Office", category:"kings", items:[{name:"Chinos", icon:"👔"},{name:"Men Office Shoes", icon:"👞", productId:9}],
-   tip:"Rule of thumb: your belt should match your shoes. Black office shoes with a black belt and navy or grey trousers never fail."},
-  {title:"Easy Weekend", category:"kings", items:[{name:"Linen Shorts", icon:"🩳"},{name:"Men Sandals", icon:"🩴", productId:10}],
-   tip:"Brown leather sandals look best with light, relaxed fabrics like linen. Keep the rest of the outfit simple."},
-  {title:"Slip-on Style", category:"kings", items:[{name:"Tailored Trousers", icon:"👔"},{name:"Men Loafers", icon:"👞", productId:7}],
-   tip:"Slip-on loafers are quick to wear and still look smart. Pair them with trousers that stop at the ankle."},
+  {title:"Evening Glam", category:"queens", items:[{name:"Slippers Heels", icon:"👡", productId:3},{name:"Clutch Bag", icon:"👜"}], tip:"Match the metal: embellished or metallic heels look best with a bag that has the same finish. Keep the bag smaller than your outfit is loud."},
+  {title:"Weekend Chic", category:"queens", items:[{name:"High-waist Jeans", icon:"👖"},{name:"Sandals Heels", icon:"👡", productId:1}], tip:"Cuffed or ankle-length jeans show off a strappy heel and make your legs look longer. Gold or nude straps go with any wash."},
+  {title:"Office Queen", category:"queens", items:[{name:"Pencil Skirt", icon:"👗"},{name:"Court Shoe", icon:"👠", productId:2}], tip:"A black court shoe is the safest heel for work. Keep the heel comfortable and the skirt at knee length for a sharp, easy look."},
+  {title:"Owambe Queen", category:"queens", items:[{name:"Gele & Ipele Set", icon:"👑", productId:6},{name:"Slingback Heel", icon:"👠", productId:4}], tip:"Let the gele be the star. A nude slingback keeps the outfit balanced and is easy to dance in."},
+  {title:"Clean Casual", category:"kings", items:[{name:"Dark Jeans", icon:"👖"},{name:"Men Brown Loafers", icon:"👞", productId:8}], tip:"Dark, slim jeans with brown loafers work for almost any day out. Wear them with or without socks and keep the leather clean."},
+  {title:"Smart Office", category:"kings", items:[{name:"Chinos", icon:"👔"},{name:"Men Office Shoes", icon:"👞", productId:9}], tip:"Rule of thumb: your belt should match your shoes. Black office shoes with a black belt and navy or grey trousers never fail."},
+  {title:"Easy Weekend", category:"kings", items:[{name:"Linen Shorts", icon:"🩳"},{name:"Men Sandals", icon:"🩴", productId:10}], tip:"Brown leather sandals look best with light, relaxed fabrics like linen. Keep the rest of the outfit simple."},
+  {title:"Slip-on Style", category:"kings", items:[{name:"Tailored Trousers", icon:"👔"},{name:"Men Loafers", icon:"👞", productId:7}], tip:"Slip-on loafers are quick to wear and still look smart. Pair them with trousers that stop at the ankle."},
 ];
 
-/* =========================================================
-   PAYMENT ACCOUNT (shown to customers)
-   ========================================================= */
 const BANK = { bank:"PremiumTrust Bank", number:"0111321770", name:"Bukola Feyisola Ajiboye" };
-
 const WA = "2348107741388";
-function openWA(msg){ window.location.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg || "Hello Affordables by Bee 🐝, I'd like to make an enquiry."); }
+const DELIVERY_FEE = 3500;
+const NG_STATES = ["Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno","Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","FCT","Gombe","Imo","Jigawa","Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa","Niger","Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe","Zamfara"];
 
 /* ---------------- helpers ---------------- */
 const fmt = n => "₦" + Math.round(n||0).toLocaleString("en-NG");
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const escAttr = s => String(s??"").replace(/[&<>"'`]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","`":"&#96;"}[c]));
 const store = {
-  get(k,d){try{return JSON.parse(localStorage.getItem("bee_"+k)) ?? d}catch(e){return d}},
-  set(k,v){try{localStorage.setItem("bee_"+k,JSON.stringify(v))}catch(e){}}
+  get(k,d){try{const v=JSON.parse(localStorage.getItem("bee_"+k)); return v??d;}catch(e){return d}},
+  set(k,v){try{localStorage.setItem("bee_"+k,JSON.stringify(v));return true;}catch(e){console.warn("Storage full:",e);toast("Your phone storage is full. Some changes might not save.",4000);return false;}}
 };
-function lagosDay(){ // DDMMYY in Lagos time
-  const p = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos",day:"2-digit",month:"2-digit",year:"2-digit"}).formatToParts(new Date());
-  const g = t => p.find(x=>x.type===t).value; return g("day")+g("month")+g("year");
-}
-function normPhone(p){ let d = String(p).replace(/\D/g,""); if(d.startsWith("0") && d.length===11) d = "234"+d.slice(1); if(d.length===10) d = "234"+d; return d; }
-function niceDate(ts){ const d = ts && ts.toDate ? ts.toDate() : new Date(); return d.toLocaleDateString("en-NG",{day:"numeric",month:"short",year:"numeric"}); }
+function lagosDay(){ const p = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos",day:"2-digit",month:"2-digit",year:"2-digit"}).formatToParts(new Date()); const g=t=>p.find(x=>x.type===t).value; return g("day")+g("month")+g("year"); }
+function normPhone(p){ let d=String(p).replace(/\D/g,""); if(d.startsWith("0")&&d.length===11) d="234"+d.slice(1); if(d.length===10) d="234"+d; return d; }
+function niceDate(ts){ const d = ts && ts.toDate ? ts.toDate() : (ts instanceof Date ? ts : new Date()); return d.toLocaleDateString("en-NG",{day:"numeric",month:"short",year:"numeric"}); }
+function productById(id){ return PRODUCTS.find(p=>p.id==id); }
+function stockClass(s){ return s===0?"out":(s<=3?"low":"in"); }
+function stockLabel(s){ return s===0?"Out of stock":(s<=3?`Only ${s} left`:""); }
 
 /* ---------------- state ---------------- */
-let cart = store.get("cart2",{}), wish = store.get("wish2",[]);
+let cart = store.get("cart2",{}), wish = store.get("wish2",[]), recently = store.get("recent2",[]);
 let goal = store.get("goal",{amount:150000,name:"Christmas goal"});
-let cat = "all";
-let user = null, profile = null, myRefs = [], myPays = [], unsubs = [], fbReady = false;
+let cat = "all", sortMode = "def";
+let user = null, profile = null, myRefs = [], myPays = [], myOrders = [], myAddresses = [], unsubs = [], fbReady = false;
 const catLabel = {all:"All products",queens:"👑 Queens",kings:"👑 Kings",unisex:"✨ Unisex"};
 
+/* ---------------- image rendering ---------------- */
+function imgTag(p,cls,large){
+  const src = large ? p.image.replace(".jpg","-lg.jpg") : p.image;
+  const ph = esc(p.icon || "📦");
+  return `<img src="${escAttr(src)}" alt="${escAttr(p.name)}" loading="lazy" decoding="async" onload="this.parentNode.classList.add('ld')" onerror="var ph=document.createElement('span');ph.className='ph';ph.textContent='${ph}';this.replaceWith(ph);this.parentNode.classList.add('ld')">`;
+}
+
 /* ---------------- shop ---------------- */
-function imgTag(p,cls,large){ const src = large ? p.image.replace(".jpg","-lg.jpg") : p.image;
-  return `<img src="${src}" alt="${esc(p.name)}" loading="lazy" decoding="async" onload="this.parentNode.classList.add('ld')" onerror="var q=this.parentNode;q.classList.add('ld');this.replaceWith(Object.assign(document.createElement('span'),{className:'${cls||'ph'}',textContent:'${p.icon}'}))">`; }
-let sortMode = "def";
 function renderProducts(){
   const q = document.getElementById("q").value.trim().toLowerCase();
   let list = PRODUCTS.filter(p => (cat==="all"||p.category===cat) && (p.name+" "+p.sub).toLowerCase().includes(q));
-  if(sortMode==="low") list = [...list].sort((a,b)=>a.price-b.price);
-  if(sortMode==="high") list = [...list].sort((a,b)=>b.price-a.price);
+  if(sortMode==="low") list=[...list].sort((a,b)=>a.price-b.price);
+  if(sortMode==="high") list=[...list].sort((a,b)=>b.price-a.price);
+  if(sortMode==="stock") list=[...list].sort((a,b)=>(a.stock||99)-(b.stock||99));
   document.getElementById("catTitle").textContent = catLabel[cat];
   document.querySelectorAll(".royal").forEach(r=>r.classList.toggle("on", r.dataset.cat===cat));
   const emptyMsg = q ? `No results for "${esc(q)}". Try another word.` : "No items here yet. Check back soon!";
-  document.getElementById("grid").innerHTML = list.length ? list.map(p=>`
+  document.getElementById("grid").innerHTML = list.length ? list.map(p=>{
+    const sCls = stockClass(p.stock ?? 99), sLabel = stockLabel(p.stock ?? 99);
+    const priceHtml = p.oldPrice ? `<span class="price"><s>${fmt(p.oldPrice)}</s>${fmt(p.price)}</span>` : `<span class="price">${fmt(p.price)}</span>`;
+    return `
     <div class="card" onclick="openProduct(${p.id})">
-      <div class="img">${imgTag(p)}<span class="tag ${p.category}">${p.category.toUpperCase()}</span></div>
+      <div class="img">${imgTag(p)}<span class="tag ${p.category}">${p.category.toUpperCase()}</span>${sLabel?`<span class="stock ${sCls}">${sLabel}</span>`:""}</div>
       <div class="info"><h5>${esc(p.name)}</h5><div class="sub">${esc(p.sub)}</div>
-        <div class="row"><span class="price">${fmt(p.price)}</span>
-        <button class="heart ${wish.includes(p.id)?'on':''}" aria-label="Wishlist" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div>
-      </div></div>`).join("") : `<div class="empty-cat">${emptyMsg}</div>`;
+        <div class="row">${priceHtml}
+        <button class="heart ${wish.includes(p.id)?'on':''}" aria-label="Wishlist" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div>
+      </div></div>`;}).join("") : `<div class="empty-cat">${emptyMsg}</div>`;
 }
-document.addEventListener("click", e=>{ const b = e.target.closest("#sortChips button"); if(!b) return; sortMode = b.dataset.s; document.querySelectorAll("#sortChips button").forEach(x=>x.classList.toggle("on",x===b)); renderProducts(); });
+
+function renderRecent(){
+  const list = recently.map(id=>productById(id)).filter(Boolean).slice(0,12);
+  const sec = document.getElementById("recentlySection");
+  if(!list.length){ sec.classList.add("hide"); return; }
+  sec.classList.remove("hide");
+  document.getElementById("recentScroll").innerHTML = list.map(p=>`
+    <div class="it" onclick="openProduct(${p.id})"><div class="im">${imgTag(p)}</div><span>${esc(p.name)}</span></div>`).join("");
+}
+function pushRecent(id){
+  recently = [id, ...recently.filter(x=>x!==id)].slice(0,12);
+  store.set("recent2",recently);
+  renderRecent();
+}
+
+document.addEventListener("click", e=>{
+  const b = e.target.closest("#sortChips button");
+  if(!b) return;
+  sortMode = b.dataset.s;
+  document.querySelectorAll("#sortChips button").forEach(x=>x.classList.toggle("on",x===b));
+  renderProducts();
+});
 function pickCat(c){ cat = (cat===c && c!=="all") ? "all" : c; renderProducts(); document.getElementById("catTitle").scrollIntoView({behavior:"smooth",block:"start"}); }
 function toggleWish(id){ wish = wish.includes(id) ? wish.filter(x=>x!==id) : [...wish,id]; store.set("wish2",wish); toast(wish.includes(id)?"Added to wishlist ♥":"Removed from wishlist"); renderAll(); }
 function cartKey(id,size){ return size ? id+"|"+size : String(id); }
-function putCart(id,size){ const k = cartKey(id,size); cart[k]=(cart[k]||0)+1; store.set("cart2",cart); }
+function putCart(id,size){ const k=cartKey(id,size); cart[k]=(cart[k]||0)+1; store.set("cart2",cart); }
 function addCart(id,size){ putCart(id,size); toast("Added to cart 🛒"); renderAll(); }
 function qty(k,d){ cart[k]=(cart[k]||0)+d; if(cart[k]<=0) delete cart[k]; store.set("cart2",cart); renderAll(); }
+function removeItem(k){ if(confirm("Remove this item from your cart?")){ delete cart[k]; store.set("cart2",cart); renderAll(); } }
 
 function balance(){ return profile ? (profile.balance||0) : 0; }
 
 function renderCart(){
-  const keys = Object.keys(cart).filter(k=>PRODUCTS.find(x=>x.id==k.split("|")[0])), el = document.getElementById("cartBody");
+  const keys = Object.keys(cart).filter(k=>{const [pid]=k.split("|");return productById(pid)}), el = document.getElementById("cartBody");
   const count = keys.reduce((s,k)=>s+cart[k],0);
   const b = document.getElementById("cartBadge"); b.style.display = count?"grid":"none"; b.textContent = count;
-  if(!keys.length){ el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11l2-8H6.5"/></svg><b>Your cart is empty</b><p>There are no products in your cart yet.</p></div>`; return; }
+  if(!keys.length){ el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11l2-8H6.5"/></svg><b>Your cart is empty</b><p>There are no products in your cart yet.</p></div>`; return; }
   let total = 0;
-  el.innerHTML = keys.map(k=>{ const [pid,size] = k.split("|"); const p = PRODUCTS.find(x=>x.id==pid); total += p.price*cart[k];
-    return `<div class="citem"><div class="th">${imgTag(p,'')}</div><div class="meta"><b>${esc(p.name)}</b>${size?`<small>Size ${size}</small>`:""}<span class="price">${fmt(p.price)}</span>
-    <div class="qty"><button aria-label="Less" onclick="qty('${k}',-1)">−</button><b>${cart[k]}</b><button aria-label="More" onclick="qty('${k}',1)">+</button></div></div></div>`}).join("") +
-    `<div class="summary"><div class="r"><span>Subtotal</span><span>${fmt(total)}</span></div>
+  el.innerHTML = keys.map(k=>{
+    const [pid,size] = k.split("|"); const p = productById(pid); if(!p) return "";
+    total += p.price*cart[k];
+    return `<div class="citem"><div class="th">${imgTag(p)}</div><div class="meta"><b>${esc(p.name)}</b>${size?`<small>Size ${size}</small>`:""}<span class="price" style="margin-top:4px;display:block">${fmt(p.price)}</span>
+    <div class="qty"><button aria-label="Less" onclick="qty('${k}',-1)">−</button><b>${cart[k]}</b><button aria-label="More" onclick="qty('${k}',1)">+</button></div>
+    <button class="link" style="margin-top:6px;padding:0" onclick="removeItem('${k}')">Remove</button></div></div>`;
+  }).join("") +
+  `<div class="summary">
+     <div class="r"><span>Subtotal</span><span>${fmt(total)}</span></div>
+     <div class="r"><span>Delivery</span><span>${fmt(DELIVERY_FEE)}</span></div>
      <div class="r"><span>MoneyBox balance</span><span>${fmt(balance())}</span></div>
-     <div class="r t"><span>To pay</span><span>${fmt(Math.max(0,total-balance()))}</span></div>
-     <button class="btn" onclick="toast('Checkout: coming next')">Checkout</button></div>`;
+     <div class="r t"><span>To pay</span><span>${fmt(Math.max(0,total+DELIVERY_FEE-balance()))}</span></div>
+     <button class="btn" onclick="openCheckout()">Checkout</button>
+     <button class="btn ghost" onclick="go('shop')">Continue shopping</button>
+   </div>`;
 }
+
 function renderWish(){
   document.getElementById("wlTitle").textContent = `My Bee Wishlist (${wish.length})`;
   const el = document.getElementById("wlBody");
-  if(!wish.length){ el.innerHTML = `<div class="empty" style="background:var(--blue-l)"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg><b>Your wishlist is empty</b><p>Products you like will appear here so you can share or buy later.</p></div>`; return; }
-  el.innerHTML = `<div class="grid">` + wish.map(id=>{const p=PRODUCTS.find(x=>x.id==id); if(!p) return ""; return `
-    <div class="card" onclick="openProduct(${p.id})"><div class="img">${imgTag(p)}</div><div class="info"><h5>${esc(p.name)}</h5>
-    <div class="row"><span class="price">${fmt(p.price)}</span><button class="heart on" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div></div></div>`}).join("") + `</div>`;
+  if(!wish.length){ el.innerHTML = `<div class="empty" style="background:var(--blue-l)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg><b>Your wishlist is empty</b><p>Products you like will appear here so you can share or buy later.</p></div>`; return; }
+  el.innerHTML = `<div class="grid">` + wish.map(id=>{
+    const p = productById(id); if(!p) return "";
+    return `<div class="card" onclick="openProduct(${p.id})"><div class="img">${imgTag(p)}<span class="tag ${p.category}">${p.category.toUpperCase()}</span></div><div class="info"><h5>${esc(p.name)}</h5>
+    <div class="row"><span class="price">${fmt(p.price)}</span><button class="heart on" aria-label="Remove from wishlist" onclick="event.stopPropagation();toggleWish(${p.id})"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5.3-8-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8 2.8C20 15.7 12 21 12 21z"/></svg></button></div></div></div>`;
+  }).join("") + `</div>`;
 }
 
 /* ---------------- moneybox ---------------- */
@@ -513,14 +588,50 @@ function renderMB(){
   document.getElementById("goalPct").textContent = Math.floor(pct)+"%";
   document.getElementById("goalBar").style.width = pct+"%";
   const pend = myPays.filter(h=>h.status==="pending").reduce((s,h)=>s+h.amount,0);
-  document.querySelector(".mb-hero .hint").textContent = !user ? "Sign in to start saving" : pend ? `${fmt(pend)} awaiting confirmation` : "Spend it on anything in the store";
+  document.getElementById("mbHint").textContent = !user ? "Sign in to start saving" : pend ? `${fmt(pend)} awaiting confirmation` : "Spend it on anything in the store";
   document.getElementById("mbActions").innerHTML = user
     ? `<button class="btn gold" onclick="openDeposit()">+ Add money</button><button class="btn ghost" onclick="openGoal()">Set goal</button>`
     : `<button class="btn gold mb-login" onclick="openAuth('signup')">Create account to start saving</button>`;
   const st = s => s==="confirmed" ? '<b style="color:var(--uni)">Confirmed</b>' : s==="rejected" ? '<b style="color:#C62828">Not received</b>' : '<b style="color:#B07A10">Pending</b>';
   document.getElementById("hist").innerHTML = !user ? `<div class="h" style="justify-content:center;color:var(--muted)">Sign in to see your savings.</div>`
-    : myPays.length ? myPays.map(h=>`<div class="h" onclick="showPay('${h.ref}',${h.amount})" style="cursor:pointer"><span>${h.ref}<small>${niceDate(h.createdAt)} · ${st(h.status)}</small></span><span class="amt" ${h.status!=="confirmed"?'style="color:#B07A10"':""}>+${fmt(h.amount)}</span></div>`).join("")
+    : myPays.length ? myPays.map(h=>`<div class="h" onclick="showPay('${h.ref}',${h.amount})"><span>${esc(h.ref)}<small>${niceDate(h.createdAt)} · ${st(h.status)}</small></span><span class="amt" ${h.status!=="confirmed"?'style="color:#B07A10"':""}>+${fmt(h.amount)}</span></div>`).join("")
     : `<div class="h" style="justify-content:center;color:var(--muted)">No savings yet. Start with any amount.</div>`;
+}
+
+function renderOrders(){
+  const el = document.getElementById("ordersBody");
+  if(!user){ el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg><b>No orders yet</b><p>Sign in to see your order history.</p></div>`; return; }
+  if(!myOrders.length){ el.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6l-2-4z"/><path d="M4 6h16M16 10a4 4 0 0 1-8 0"/></svg><b>No orders yet</b><p>When you place an order, it will show up here with its status.</p></div>`; return; }
+  const statusLabel = {pending:"Pending confirmation",confirmed:"Confirmed",shipped:"Shipped",delivered:"Delivered",cancelled:"Cancelled"};
+  el.innerHTML = myOrders.map(o=>{
+    const items = (o.items||[]).map(it=>`${esc(it.name)}${it.size?` (size ${it.size})`:""} × ${it.qty||1}`).join(" · ");
+    return `<div class="ord" onclick="openOrderDetail('${o.id}')">
+      <div class="h"><b>${esc(o.ref||o.id)}</b><span>${niceDate(o.createdAt)}</span></div>
+      <div class="its">${esc(items)}</div>
+      <div class="f"><span class="pill ${o.status}" style="background:var(--blue-l);color:var(--blue)">${statusLabel[o.status]||o.status}</span><b>${fmt(o.total||0)}</b></div>
+      ${o.trackingRef?`<div class="steps">Tracking: ${esc(o.trackingRef)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function openOrderDetail(id){
+  const o = myOrders.find(x=>x.id===id); if(!o) return;
+  const statusLabel = {pending:"Pending confirmation",confirmed:"Confirmed",shipped:"Shipped",delivered:"Delivered",cancelled:"Cancelled"};
+  const items = (o.items||[]).map(it=>`<div class="pr"><span>${esc(it.name)}${it.size?` · size ${it.size}`:""}</span><b>${it.qty||1} × ${fmt(it.price)}</b></div>`).join("");
+  sheet(`<h2>Order ${esc(o.ref||o.id)}</h2>
+    <div class="paybox">
+      <div class="pr"><span>Status</span><b>${statusLabel[o.status]||o.status}</b></div>
+      <div class="pr"><span>Placed</span><b>${niceDate(o.createdAt)}</b></div>
+      <div class="pr"><span>MoneyBox used</span><b>${fmt(o.moneyboxUsed||0)}</b></div>
+      <div class="pr"><span>To pay</span><b>${fmt(Math.max(0,(o.total||0)-(o.moneyboxUsed||0)))}</b></div>
+    </div>
+    <h3 style="margin:14px 0 6px;font-size:15px">Items</h3>
+    <div class="paybox">${items}</div>
+    <h3 style="margin:14px 0 6px;font-size:15px">Delivery address</h3>
+    <div class="pr" style="flex-direction:column;align-items:flex-start;gap:4px"><span style="width:auto">${esc(o.address?.name||"")} · +${esc(o.address?.phone||"")}</span><b style="text-align:left">${esc(o.address?.line1||"")}, ${esc(o.address?.city||"")}${o.address?.state?", "+esc(o.address.state):""}${o.address?.note?"<br>"+esc(o.address.note):""}</b></div>
+    ${o.trackingRef?`<h3 style="margin:14px 0 6px;font-size:15px">Tracking</h3><div class="paybox"><div class="pr"><span>Tracking ref</span><b>${esc(o.trackingRef)}</b></div></div>`:""}
+    <button class="btn wa" onclick="waOrder('${o.id}')">💬 Ask about this order on WhatsApp</button>
+    <button class="btn ghost" onclick="closeSheet()">Close</button>`);
 }
 
 function renderAccount(){
@@ -535,10 +646,10 @@ function renderAccount(){
 let pairCat = "all";
 function renderPairs(){
   const list = PAIRINGS.filter(p=>pairCat==="all"||p.category===pairCat);
-  document.getElementById("pairList").innerHTML = list.map((p,i)=>{
-    const ids = p.items.map(it=>it.productId).filter(id=>PRODUCTS.find(x=>x.id===id));
-    const tile = it => { const pr = PRODUCTS.find(x=>x.id===it.productId);
-      return `<div class="it" ${pr?`onclick="openProduct(${pr.id})" style="cursor:pointer"`:""}><div class="im">${pr?imgTag(pr):(it.image?`<img src="${it.image}" alt="" onerror="this.replaceWith('${it.icon}')">`:it.icon)}</div><span>${esc(it.name)}</span></div>`; };
+  document.getElementById("pairList").innerHTML = list.map(p=>{
+    const ids = p.items.map(it=>it.productId).filter(id=>productById(id));
+    const tile = it => { const pr = productById(it.productId);
+      return `<div class="it" ${pr?`onclick="openProduct(${pr.id})" style="cursor:pointer"`:""}><div class="im">${pr?imgTag(pr):`<span>${it.icon}</span>`}</div><span>${esc(it.name)}</span></div>`; };
     return `<div class="look"><div class="look-h"><b>${esc(p.title)}</b><span class="tag ${p.category}" style="position:static">${p.category.toUpperCase()}</span></div>
       <div class="duo">${p.items.map(tile).join('<div class="plus">+</div>')}</div>
       <div class="tip">💡 ${esc(p.tip)}</div>
@@ -547,8 +658,8 @@ function renderPairs(){
 }
 let lookSizes = {};
 function shopLook(ids){
-  const items = ids.map(id=>PRODUCTS.find(x=>x.id===id)).filter(Boolean), shoes = items.filter(p=>p.shoe);
-  if(!shoes.length){ items.forEach(p=>putCart(p.id)); renderAll(); toast(`Added ${items.length} item${items.length>1?"s":""} to cart 🛒`); return; }
+  const items = ids.map(id=>productById(id)).filter(Boolean), shoes = items.filter(p=>p.shoe);
+  if(!shoes.length){ items.forEach(p=>{ if((p.stock??99)===0){return toast(`${p.name} is out of stock`);} putCart(p.id); }); renderAll(); toast(`Added ${items.length} item${items.length>1?"s":""} to cart 🛒`); return; }
   lookSizes = {};
   sheet(`<h2>Shop this look</h2><p class="desc">Choose your size for each shoe.</p>` + shoes.map(p=>`
     <label class="fl"><b>${esc(p.name)}</b> · ${fmt(p.price)}</label>
@@ -557,18 +668,18 @@ function shopLook(ids){
 }
 function lookSize(id,z){ lookSizes[id]=z; document.querySelectorAll("#ls"+id+" button").forEach(b=>b.classList.toggle("on",b.dataset.s===z)); }
 function confirmLook(ids){
-  const items = ids.map(id=>PRODUCTS.find(x=>x.id===id)).filter(Boolean);
+  const items = ids.map(id=>productById(id)).filter(Boolean);
   if(items.some(p=>p.shoe && !lookSizes[p.id])) return toast("Please choose a size for each shoe 👟");
   items.forEach(p=>putCart(p.id, p.shoe ? lookSizes[p.id] : null)); closeSheet(); renderAll(); toast(`Added ${items.length} item${items.length>1?"s":""} to cart 🛒`);
 }
-document.getElementById("pairChips").addEventListener("click", e=>{ const c=e.target.dataset.c; if(!c) return; pairCat=c; document.querySelectorAll("#pairChips button").forEach(b=>b.classList.toggle("on",b.dataset.c===c)); renderPairs(); });
+document.getElementById("pairChips").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; pairCat=b.dataset.c; document.querySelectorAll("#pairChips button").forEach(x=>x.classList.toggle("on",x===b)); renderPairs(); });
 
-function renderAll(){ renderPairs(); renderProducts(); renderCart(); renderWish(); renderMB(); renderAccount(); }
+function renderAll(){ renderPairs(); renderProducts(); renderCart(); renderWish(); renderMB(); renderOrders(); renderAccount(); renderRecent(); }
 
 /* ---------------- auth: Google + email/password ---------------- */
-const GOOGLE_SVG = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`;
+const GOOGLE_SVG = `<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`;
 function openAuth(mode){
-  if(!fbReady){ toast("Connecting… please try again in a moment"); return; }
+  if(!fbReady){ toast("Connecting… please try again in a moment",3000); return; }
   const su = mode==="signup";
   sheet(`<h2>${su?"Create your account":"Welcome back"}</h2>
    <p class="desc" style="margin-bottom:12px">${su?"Join in seconds to start saving in your MoneyBox.":"Sign in to see your MoneyBox."}</p>
@@ -578,7 +689,7 @@ function openAuth(mode){
    ${su?`<label class="fl">Full name</label><input class="field" id="aName" autocomplete="name" placeholder="e.g. Ada Obi">`:""}
    <label class="fl">Email</label><input class="field" id="aEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com">
    ${su?`<label class="fl">Phone / WhatsApp number</label><input class="field" id="aPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08031234567">`:""}
-   <label class="fl">Password${su?" (at least 6 characters)":""}</label><input class="field" id="aPass" type="password" autocomplete="${su?'new-password':'current-password'}" placeholder="••••••">
+   <label class="fl">Password${su?" (at least 6 characters)":""}</label><input class="field" id="aPass" type="password" autocomplete="${su?'new-password':'current-password'}" placeholder="••••••" onkeydown="if(event.key==='Enter')doAuth(${su})">
    ${!su?`<div style="text-align:right;margin-top:8px"><button class="link" onclick="forgotPass()">Forgot password?</button></div>`:""}
    <div class="err" id="aErr"></div>
    <button class="btn" id="aBtn" onclick="doAuth(${su})">${su?"Create account":"Sign in"}</button>`);
@@ -625,14 +736,14 @@ async function forgotPass(){
   const email = (document.getElementById("aEmail").value||"").trim();
   const err = m => document.getElementById("aErr").textContent = m;
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return err("Type your email above first, then tap Forgot password.");
-  try{ await fb.sendPasswordResetEmail(fb.auth, email); err(""); toast("Reset link sent. Check your email (and spam) 📧"); }
+  try{ await fb.sendPasswordResetEmail(fb.auth, email); err(""); toast("Reset link sent. Check your email (and spam) 📧",4000); }
   catch(e){ err(authMsg(e.code||"")); }
 }
 let pendingProfile = null;
 async function saveProfile(u, name, phone){
   await fb.setDoc(fb.doc(fb.db,"users",u.uid), {name, phone, email:(u.email||"").toLowerCase(), balance:0, createdAt:fb.serverTimestamp()});
 }
-function askProfile(){ // Google users: collect phone once
+function askProfile(){
   const g = user && user.displayName || "";
   sheet(`<h2>One last step 👑</h2><p class="desc">Add your phone number so we can reach you about your orders and payments.</p>
    <label class="fl">Full name</label><input class="field" id="pName" value="${esc(g)}" autocomplete="name">
@@ -652,7 +763,7 @@ async function finishProfile(){
 function logout(){ fb.signOut(fb.auth); toast("Signed out"); }
 
 function onUser(u){
-  unsubs.forEach(f=>f()); unsubs = []; user = u; profile = null; myRefs = []; myPays = [];
+  unsubs.forEach(f=>f()); unsubs = []; user = u; profile = null; myRefs = []; myPays = []; myOrders = []; myAddresses = [];
   if(u){
     let first = true;
     unsubs.push(fb.onSnapshot(fb.doc(fb.db,"users",u.uid), s => {
@@ -663,6 +774,10 @@ function onUser(u){
       myRefs = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); }));
     unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"payments"), fb.where("uid","==",u.uid)), s => {
       myPays = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); renderMB(); }));
+    unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"orders"), fb.where("uid","==",u.uid)), s => {
+      myOrders = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||9e9)-(a.createdAt?.seconds||9e9)); renderOrders(); }));
+    unsubs.push(fb.onSnapshot(fb.query(fb.collection(fb.db,"addresses"), fb.where("uid","==",u.uid)), s => {
+      myAddresses = s.docs.map(d=>({id:d.id,...d.data()})); }));
   } else pendingProfile = null;
   renderAll();
 }
@@ -673,13 +788,13 @@ function openDeposit(){
   if(!user){ openAuth("signin"); return; }
   if(!profile){ askProfile(); return; }
   chosenRef = myRefs.length ? myRefs[0].id : "new";
-  const opts = myRefs.slice(0,5).map(r=>`<div class="opt ${chosenRef===r.id?'on':''}" data-r="${r.id}" onclick="pickRef('${r.id}')"><span class="rd"></span><span><b>${r.id}</b><small>Created ${niceDate(r.createdAt)}</small></span></div>`).join("");
+  const opts = myRefs.slice(0,5).map(r=>`<div class="opt ${chosenRef===r.id?'on':''}" data-r="${escAttr(r.id)}" onclick="pickRef('${escAttr(r.id)}')"><span class="rd"></span><span><b>${esc(r.id)}</b><small>Created ${niceDate(r.createdAt)}</small></span></div>`).join("");
   sheet(`<h2>Add to MoneyBox</h2><p class="desc">Choose an amount or type your own.</p>
    <div class="amts">${[2000,5000,10000,20000,50000,100000].map(a=>`<button onclick="document.getElementById('amt').value=${a};document.querySelectorAll('.amts button').forEach(b=>b.classList.remove('on'));this.classList.add('on')">${fmt(a)}</button>`).join("")}</div>
    <input class="field" id="amt" type="number" inputmode="numeric" placeholder="Enter amount (₦)">
    ${myRefs.length?`<label class="fl" style="margin-top:14px">Which payment reference do you want to use?</label>${opts}
    <div class="opt ${chosenRef==='new'?'on':''}" data-r="new" onclick="pickRef('new')"><span class="rd"></span><span><b style="font-family:inherit">Generate a new reference</b><small>Get a fresh reference for this payment</small></span></div>`:""}
-   <div class="note" style="margin:12px 0 0"><span>⚠️</span><span>MoneyBox savings are not refundable as cash. You can only spend them on items in this store.</span></div>
+   <div class="note" style="margin:12px 0 0"><span aria-hidden="true">⚠️</span><span>MoneyBox savings are not refundable as cash. You can only spend them on items in this store.</span></div>
    <div class="err" id="dErr"></div>
    <button class="btn gold" id="genBtn" onclick="startPayment()">Continue to payment</button>`);
 }
@@ -691,7 +806,7 @@ async function newReference(){
     const s = await tx.get(cRef);
     const n = (s.exists() ? s.data().n : 0) + 1, seqStr = String(n).padStart(4,"0"), id = "MBOX"+day+seqStr;
     tx.set(cRef, {n});
-    tx.set(fb.doc(fb.db,"refs",id), {uid:user.uid, day, seq:n, seqStr, name:profile.name, phone:profile.phone, createdAt:fb.serverTimestamp()});
+    tx.set(fb.doc(fb.db,"refs",id), {uid:user.uid, ref:id, day, seq:n, seqStr, name:profile.name, phone:profile.phone, createdAt:fb.serverTimestamp()});
     return id;
   });
 }
@@ -699,6 +814,7 @@ async function startPayment(){
   const a = Math.round(+document.getElementById("amt").value);
   const err = m => document.getElementById("dErr").textContent = m;
   if(!a || a<100) return err("Enter at least ₦100");
+  if(a>10000000) return err("Maximum is ₦10,000,000 per deposit");
   if(!profile) return err("Your profile is still loading. Try again in a moment.");
   const btn = document.getElementById("genBtn"); btn.disabled = true; btn.textContent = "Generating…";
   try{
@@ -708,62 +824,268 @@ async function startPayment(){
   }catch(e){ console.error(e); btn.disabled=false; btn.textContent="Continue to payment"; err("Could not create your reference. Check your connection and try again."); }
 }
 
-function copyTxt(t,label){ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(label+" copied ✓")).catch(()=>{const i=document.createElement("input");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy");toast(label+" copied ✓")}catch(e){};i.remove();}); }
+function copyTxt(t,label){
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast(label+" copied ✓",3000))
+    .catch(()=>{const i=document.createElement("input");i.value=t;document.body.appendChild(i);i.select();try{document.execCommand("copy");toast(label+" copied ✓",3000)}catch(e){};i.remove();});
+}
 function showPay(ref,a){
   sheet(`<h2>Make your transfer</h2><p class="desc">Transfer exactly this amount and put the reference in the <b>narration / description</b>.</p>
-   <div class="refbox"><small>YOUR PAYMENT REFERENCE</small><div class="ref">${ref}</div>
-     <button class="cp" onclick="copyTxt('${ref}','Reference')">Copy reference</button></div>
+   <div class="refbox"><small>YOUR PAYMENT REFERENCE</small><div class="ref">${esc(ref)}</div>
+     <button class="cp" onclick="copyTxt('${escAttr(ref)}','Reference')">Copy reference</button></div>
    <div class="paybox">
      <div class="pr"><span>Amount</span><b>${fmt(a)}</b><button onclick="copyTxt('${a}','Amount')">Copy</button></div>
-     <div class="pr"><span>Bank</span><b>${BANK.bank}</b></div>
-     <div class="pr"><span>Account number</span><b>${BANK.number}</b><button onclick="copyTxt('${BANK.number}','Account number')">Copy</button></div>
-     <div class="pr"><span>Account name</span><b>${BANK.name}</b></div>
+     <div class="pr"><span>Bank</span><b>${esc(BANK.bank)}</b></div>
+     <div class="pr"><span>Account number</span><b>${esc(BANK.number)}</b><button onclick="copyTxt('${escAttr(BANK.number)}','Account number')">Copy</button></div>
+     <div class="pr"><span>Account name</span><b>${esc(BANK.name)}</b></div>
    </div>
-   <div class="note" style="margin:12px 0 0"><span>ℹ️</span><span>Your MoneyBox is credited once we confirm the transfer with this reference. Without the reference, your payment may be delayed.</span></div>
-   <button class="btn" onclick="closeSheet();toast('Thank you! We will confirm shortly 🐝')">I have made the transfer</button>`);
+   <div class="note" style="margin:12px 0 0"><span aria-hidden="true">ℹ️</span><span>Your MoneyBox is credited once we confirm the transfer with this reference. Without the reference, your payment may be delayed.</span></div>
+   <button class="btn" onclick="closeSheet();toast('Thank you! We will confirm shortly 🐝',4000)">I have made the transfer</button>`);
 }
 function openGoal(){
   sheet(`<h2>Set your savings goal</h2><p class="desc">What are you saving for?</p>
-   <input class="field" id="gn" value="${esc(goal.name)}" style="margin:12px 0 8px">
-   <input class="field" id="ga" type="number" inputmode="numeric" value="${goal.amount}">
+   <label class="fl">Goal name</label><input class="field" id="gn" value="${esc(goal.name)}" style="margin-bottom:8px">
+   <label class="fl">Target amount</label><input class="field" id="ga" type="number" inputmode="numeric" value="${goal.amount}">
    <button class="btn" onclick="goal={name:document.getElementById('gn').value||'My goal',amount:+document.getElementById('ga').value||0};store.set('goal',goal);closeSheet();renderMB();toast('Goal saved 👑')">Save goal</button>`);
 }
 
 /* ---------------- product sheet + ui ---------------- */
 let selSize = null;
 function openProduct(id){
-  const p = PRODUCTS.find(x=>x.id==id); const weekly = Math.ceil(p.price/8/100)*100; selSize = null;
-  sheet(`<div class="pd-img" onclick="zoomImg()">${imgTag(p,'',true)}</div><h2>${esc(p.name)}</h2><p class="desc">${esc(p.sub)}</p><div class="big">${fmt(p.price)}</div>
-   ${p.shoe?`<label class="fl">Select your size</label><div class="sizes" id="sizes">${SIZES[p.category].map(z=>`<button data-s="${z}" onclick="pickSize('${z}')">${z}</button>`).join("")}</div>`:""}
+  const p = productById(id); if(!p) return;
+  pushRecent(id);
+  const weekly = Math.ceil(p.price/8/100)*100;
+  selSize = null;
+  const outOfStock = (p.stock ?? 99) === 0;
+  const guide = p.shoe ? (SIZE_GUIDE.find(g=>g.cat===p.category) || SIZE_GUIDE[0]) : null;
+  const sizeHtml = p.shoe ? `<label class="fl">Select your size</label>
+    <div class="sizes" id="sizes">${SIZES[p.category].map(z=>`<button data-s="${z}" ${outOfStock?'disabled':''} onclick="pickSize('${z}')">${z}</button>`).join("")}</div>
+    ${guide?`<button class="link" style="display:block;margin-top:6px" onclick="openSizeGuide('${p.category}')">📏 Size guide</button>`:""}` : "";
+  sheet(`<div class="pd-img" onclick="zoomImg()">${imgTag(p,'',true)}</div><h2>${esc(p.name)}</h2><p class="desc">${esc(p.sub)}</p><div class="big">${p.oldPrice?`<s style="font-size:14px;color:var(--muted);font-weight:400">${fmt(p.oldPrice)}</s> `:""}${fmt(p.price)}</div>
+   ${outOfStock?`<div class="note" style="background:var(--red-l);color:#C62828;border-color:#F8C8C8"><span aria-hidden="true">⚠️</span><span>Out of stock. Tap the wishlist heart and we'll let you know when it's back.</span></div>`:""}
+   ${sizeHtml}
    <div class="plan">🐝 Or save <b>${fmt(weekly)}/week</b> in your MoneyBox for 8 weeks</div>
-   <button class="btn" onclick="addFromSheet(${p.id})">Add to cart</button>
+   <button class="btn" ${outOfStock?'disabled':''} onclick="addFromSheet(${p.id})">${outOfStock?"Out of stock":"Add to cart"}</button>
    <button class="btn wa" onclick="askWA(${p.id})">💬 Ask about this on WhatsApp</button>
    <button class="btn ghost" onclick="toggleWish(${p.id});closeSheet()">${wish.includes(p.id)?"Remove from":"Add to"} wishlist</button>`);
 }
+function openSizeGuide(c){
+  const g = SIZE_GUIDE.find(x=>x.cat===c); if(!g) return;
+  const rows = g.rows.map(r=>`<tr>${r.map((c2,i)=>`<${i===0?"th":"td"}>${esc(c2)}</${i===0?"th":"td"}>`).join("")}</tr>`).join("");
+  sheet(`<h2>Size guide · ${c==="queens"?"Women":c==="kings"?"Men":"Unisex"}</h2>
+    <p class="desc">Measure your foot from heel to longest toe and match the length (cm) below.</p>
+    <div class="sizeguide"><table><tbody>${rows}</tbody></table></div>
+    <button class="btn ghost" onclick="closeSheet()">Close</button>`);
+}
 function pickSize(z){ selSize = z; document.querySelectorAll("#sizes button").forEach(b=>b.classList.toggle("on",b.dataset.s===z)); }
 function addFromSheet(id){
-  const p = PRODUCTS.find(x=>x.id==id);
+  const p = productById(id);
+  if((p.stock ?? 99) === 0) return toast("This item is out of stock");
   if(p.shoe && !selSize){ const el = document.getElementById("sizes"); el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); return toast("Please choose a size 👟"); }
   addCart(id, p.shoe ? selSize : null); closeSheet();
 }
-function askWA(id){ const p = PRODUCTS.find(x=>x.id==id); openWA(`Hello Affordables by Bee 🐝, I'm interested in the ${p.name} (${fmt(p.price)})${selSize?`, size ${selSize}`:""}.`); }
+function askWA(id){ const p = productById(id); openWA(`Hello Affordables by Bee 🐝, I'm interested in the ${p.name} (${fmt(p.price)})${selSize?`, size ${selSize}`:""}.`); }
 function zoomImg(){ const im = document.querySelector(".pd-img img"); if(!im) return; document.getElementById("zimg").src = im.src; document.getElementById("zin").classList.remove("big"); document.getElementById("zoom").classList.add("open"); }
 function closeZoom(){ document.getElementById("zoom").classList.remove("open"); }
-function sheet(html){ document.getElementById("sheetBody").innerHTML = html; document.getElementById("bg").style.display="block"; requestAnimationFrame(()=>document.getElementById("sheet").classList.add("open")); }
-function closeSheet(){ document.getElementById("sheet").classList.remove("open"); setTimeout(()=>document.getElementById("bg").style.display="none",250); }
-let tt; function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ---------------- checkout ---------------- */
+let chosenAddrId = null;
+async function openCheckout(){
+  if(!user){ toast("Please sign in to check out"); openAuth("signin"); return; }
+  if(!profile){ askProfile(); return; }
+  const keys = Object.keys(cart).filter(k=>productById(k.split("|")[0]));
+  if(!keys.length) return toast("Your cart is empty");
+  const items = keys.map(k=>{
+    const [pid,size] = k.split("|"); const p = productById(pid);
+    return {id:p.id, name:p.name, price:p.price, qty:cart[k], size:size||null};
+  });
+  const subtotal = items.reduce((s,it)=>s+it.price*it.qty,0);
+  const total = subtotal + DELIVERY_FEE;
+  const maxMB = Math.min(balance(), total);
+  if(!myAddresses.length && !chosenAddrId){
+    sheet(`<h2>Delivery address</h2><p class="desc">We need your delivery address to check out.</p>
+      ${addrFormHtml()}
+      <div class="err" id="adErr"></div>
+      <button class="btn" id="adBtn" onclick="saveAddrAndCheckout()">Save and continue</button>`);
+    return;
+  }
+  const addrOpts = myAddresses.map(a=>`<div class="opt ${chosenAddrId===a.id?'on':''}" data-r="${escAttr(a.id)}" onclick="chosenAddrId='${escAttr(a.id)}';document.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',o.dataset.r==='${escAttr(a.id)}'))">
+      <span class="rd"></span><span><b>${esc(a.name)}</b><small>${esc(a.line1)}, ${esc(a.city)}${a.state?", "+esc(a.state):""} · +${esc(a.phone)}</small></span></div>`).join("");
+  sheet(`<h2>Checkout</h2>
+    <div class="paybox">${items.map(it=>`<div class="pr"><span>${esc(it.name)}${it.size?" · size "+esc(it.size):""} × ${it.qty}</span><b>${fmt(it.price*it.qty)}</b></div>`).join("")}
+      <div class="pr"><span>Delivery</span><b>${fmt(DELIVERY_FEE)}</b></div>
+      <div class="pr" style="font-weight:800"><span>To pay</span><b>${fmt(total)}</b></div></div>
+    <label class="fl">Delivery address</label>${addrOpts}
+    <button class="link" style="margin:6px 0 12px" onclick="openAddressForm()">+ Add a new address</button>
+    <label class="fl">Use MoneyBox (balance: ${fmt(balance())})</label>
+    <input class="field" id="mbUse" type="number" inputmode="numeric" value="${maxMB}" min="0" max="${maxMB}" oninput="document.getElementById('mbLeft').textContent=fmt(Math.max(0,${total}-(+this.value||0)))">
+    <div class="note" style="margin:8px 0;background:var(--blue-l);color:var(--blue-d);border-color:var(--blue-l)">
+      <span>You'll pay</span><span><b id="mbLeft">${fmt(Math.max(0,total-maxMB))}</b> by bank transfer after placing the order.</div>
+    <div class="err" id="coErr"></div>
+    <button class="btn" id="placeBtn" onclick="placeOrder(${total})">Place order</button>
+    <button class="btn wa" onclick="checkoutViaWA()">💬 Place order via WhatsApp</button>`);
+}
+function addrFormHtml(existing){
+  const a = existing || {};
+  return `
+   <label class="fl">Recipient name</label><input class="field" id="adName" value="${esc(a.name||"")}" placeholder="e.g. Ada Obi">
+   <label class="fl">Phone / WhatsApp</label><input class="field" id="adPhone" type="tel" inputmode="tel" value="${esc(a.phone||"")}" placeholder="08031234567">
+   <label class="fl">Street / house number / landmark</label><textarea class="field" id="adLine1" placeholder="No 12 Allen Avenue, by Peace Estate">${esc(a.line1||"")}</textarea>
+   <label class="fl">City / Town</label><input class="field" id="adCity" value="${esc(a.city||"")}" placeholder="Ikeja">
+   <label class="fl">State</label>
+   <select class="field" id="adState">${NG_STATES.map(s=>`<option ${a.state===s?"selected":""}>${s}</option>`).join("")}</select>
+   <label class="fl">Delivery note (optional)</label><textarea class="field" id="adNote" placeholder="e.g. call before delivery">${esc(a.note||"")}</textarea>`;
+}
+async function openAddressForm(){
+  sheet(`<h2>New delivery address</h2>${addrFormHtml()}<div class="err" id="adErr"></div>
+    <button class="btn" id="adBtn" onclick="saveAddr(true)">Save address</button>
+    <button class="btn ghost" onclick="openCheckout()">Back</button>`);
+}
+async function saveAddr(returnToCheckout){
+  const err = m => document.getElementById("adErr").textContent = m;
+  const name = document.getElementById("adName").value.trim().replace(/\s+/g," ");
+  const phone = normPhone(document.getElementById("adPhone").value);
+  const line1 = document.getElementById("adLine1").value.trim();
+  const city = document.getElementById("adCity").value.trim();
+  const state = document.getElementById("adState").value;
+  const note = document.getElementById("adNote").value.trim();
+  if(name.length<3) return err("Enter the recipient's full name");
+  if(phone.length!==13 || !phone.startsWith("234")) return err("Enter a valid Nigerian phone number");
+  if(line1.length<5) return err("Enter the street / house number / landmark");
+  if(city.length<2) return err("Enter the city / town");
+  const btn = document.getElementById("adBtn"); btn.disabled = true; btn.textContent = "Saving…";
+  try{
+    const ref = await fb.addDoc(fb.collection(fb.db,"addresses"), {uid:user.uid, name, phone, line1, city, state, note:note||null, isDefault: myAddresses.length===0, createdAt:fb.serverTimestamp()});
+    chosenAddrId = ref.id;
+    toast("Address saved ✓");
+    if(returnToCheckout) openCheckout(); else closeSheet();
+  }catch(e){ btn.disabled=false; btn.textContent="Save address"; err("Couldn't save. Check your connection and try again."); }
+}
+async function saveAddrAndCheckout(){ await saveAddr(false); if(chosenAddrId) setTimeout(openCheckout,300); }
+function openAddresses(){
+  if(!user){ toast("Sign in to manage addresses"); openAuth("signin"); return; }
+  if(!myAddresses.length){ openAddressForm(); return; }
+  const list = myAddresses.map(a=>`<div class="citem" style="align-items:flex-start"><div class="th" aria-hidden="true" style="font-size:24px">📍</div>
+    <div class="meta"><b>${esc(a.name)}</b><small>+${esc(a.phone)}</small><small>${esc(a.line1)}, ${esc(a.city)}${a.state?", "+esc(a.state):""}${a.note?" · "+esc(a.note):""}</small></div></div>`).join("");
+  sheet(`<h2>Delivery addresses</h2>${list}
+    <button class="btn" onclick="openAddressForm()">+ Add new address</button>
+    <button class="btn ghost" onclick="closeSheet()">Close</button>`);
+}
+
+async function placeOrder(total){
+  const err = m => document.getElementById("coErr").textContent = m;
+  if(!chosenAddrId) return err("Pick a delivery address");
+  const addr = myAddresses.find(a=>a.id===chosenAddrId); if(!addr) return err("Address not found. Reopen checkout.");
+  const mbUse = Math.max(0, Math.min(+document.getElementById("mbUse").value||0, balance(), total));
+  if(mbUse>0 && mbUse>balance()) return err("You can't use more than your MoneyBox balance");
+  const keys = Object.keys(cart).filter(k=>productById(k.split("|")[0]));
+  const items = keys.map(k=>{
+    const [pid,size] = k.split("|"); const p = productById(pid);
+    return {id:p.id, name:p.name, price:p.price, qty:cart[k], size:size||null};
+  });
+  const btn = document.getElementById("placeBtn"); btn.disabled = true; btn.textContent = "Placing order…";
+  try{
+    // Generate order reference: ORD + lagosDay + 4 random
+    const ref = "ORD"+lagosDay()+String(Math.floor(1000+Math.random()*9000));
+    const orderDoc = {
+      uid:user.uid, ref, items, total, moneyboxUsed:mbUse,
+      address:{name:addr.name, phone:addr.phone, line1:addr.line1, city:addr.city, state:addr.state||null, note:addr.note||null},
+      status:"pending", createdAt:fb.serverTimestamp()
+    };
+    const orderRef = await fb.addDoc(fb.collection(fb.db,"orders"), orderDoc);
+    // If MoneyBox is used, deduct it (this requires an admin Cloud Function for security,
+    // but we'll mark the MoneyBox usage on the order; admin will confirm the deduction
+    // when confirming the order). For now, we DON'T deduct on the client.
+    cart = {}; store.set("cart2",cart);
+    chosenAddrId = null;
+    closeSheet();
+    showOrderPlaced(ref, orderRef.id, total, mbUse);
+  }catch(e){
+    console.error(e); btn.disabled=false; btn.textContent="Place order";
+    err("Could not place order. Check your connection and try again.");
+  }
+}
+function showOrderPlaced(ref, id, total, mbUse){
+  sheet(`<h2>Order placed 🎉</h2>
+    <p class="desc">We received your order <b>${esc(ref)}</b>. We'll WhatsApp you to confirm.</p>
+    <div class="paybox">
+      <div class="pr"><span>Order total</span><b>${fmt(total)}</b></div>
+      <div class="pr"><span>MoneyBox applied</span><b>${fmt(mbUse)}</b></div>
+      <div class="pr"><span>To pay by transfer</span><b>${fmt(total-mbUse)}</b></div>
+    </div>
+    ${total-mbUse>0?`<div class="note" style="margin-top:12px"><span aria-hidden="true">ℹ️</span><span>Transfer the remaining ${fmt(total-mbUse)} to the bank details below, using <b>${esc(ref)}</b> as the narration.</span></div>
+    <div class="paybox">
+      <div class="pr"><span>Bank</span><b>${esc(BANK.bank)}</b></div>
+      <div class="pr"><span>Account number</span><b>${esc(BANK.number)}</b><button onclick="copyTxt('${escAttr(BANK.number)}','Account number')">Copy</button></div>
+      <div class="pr"><span>Account name</span><b>${esc(BANK.name)}</b></div>
+    </div>`:""}
+    <button class="btn wa" onclick="waOrder('${id}')">💬 Send order on WhatsApp</button>
+    <button class="btn ghost" onclick="closeSheet();go('orders')">View my orders</button>`);
+}
+function checkoutViaWA(){
+  const keys = Object.keys(cart).filter(k=>productById(k.split("|")[0]));
+  if(!keys.length) return toast("Cart is empty");
+  const lines = keys.map(k=>{const [pid,size]=k.split("|");const p=productById(pid);return `• ${p.name}${size?" size "+size:""} × ${cart[k]} — ${fmt(p.price*cart[k])}`;}).join("\n");
+  const total = keys.reduce((s,k)=>{const p=productById(k.split("|")[0]);return s+p.price*cart[k];},0)+DELIVERY_FEE;
+  openWA(`Hello Affordables by Bee 🐝, I'd like to place this order:\n\n${lines}\n\nSubtotal: ${fmt(total-DELIVERY_FEE)}\nDelivery: ${fmt(DELIVERY_FEE)}\nTotal: ${fmt(total)}\n\nMy name: ${profile?profile.name:""}\nPhone: ${profile?"+"+profile.phone:""}`);
+}
+function waOrder(id){
+  const o = myOrders.find(x=>x.id===id) || {ref:id, items:[], total:0, moneyboxUsed:0, address:{}};
+  const lines = (o.items||[]).map(it=>`• ${it.name}${it.size?" size "+it.size:""} × ${it.qty||1} — ${fmt(it.price*(it.qty||1))}`).join("\n");
+  openWA(`Hello Affordables by Bee 🐝, about my order ${o.ref||id}:\n\n${lines||"(no items)"}\n\nTotal: ${fmt(o.total||0)}\nMoneyBox used: ${fmt(o.moneyboxUsed||0)}\nDeliver to: ${o.address?.name||""}, ${o.address?.line1||""}, ${o.address?.city||""}`);
+}
+
+/* ---------------- ui helpers ---------------- */
+function sheet(html){
+  document.getElementById("sheetBody").innerHTML = html;
+  document.getElementById("bg").classList.add("open");
+  document.getElementById("sheet").setAttribute("aria-modal","true");
+  requestAnimationFrame(()=>document.getElementById("sheet").classList.add("open"));
+  // move focus into sheet for accessibility
+  setTimeout(()=>{ const f=document.querySelector("#sheetBody input, #sheetBody button, #sheetBody a"); if(f) f.focus(); }, 200);
+}
+function closeSheet(){
+  document.getElementById("sheet").classList.remove("open");
+  setTimeout(()=>{ document.getElementById("bg").classList.remove("open"); document.getElementById("sheetBody").innerHTML=""; }, 250);
+}
+let tt;
+function toast(m,ms){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),ms||2400); }
 function go(p){
   document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active", s.id==="p-"+p));
   document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on", b.dataset.p===p));
   window.scrollTo(0,0);
 }
-const car = document.getElementById("carousel"), dots = [...document.querySelectorAll("#dots span")];
-car.addEventListener("scroll",()=>{ const i = Math.round(car.scrollLeft/(car.firstElementChild.offsetWidth+12)); dots.forEach((d,j)=>d.classList.toggle("on",i===j)); });
-setInterval(()=>{ if(!document.getElementById("p-shop").classList.contains("active")) return; const w = car.firstElementChild.offsetWidth+12; const i = Math.round(car.scrollLeft/w); car.scrollTo({left: ((i+1)%dots.length)*w, behavior:"smooth"}); }, 4000);
+function openWA(msg){ window.location.href = "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg || "Hello Affordables by Bee 🐝, I'd like to make an enquiry."); }
 
-window.addEventListener("fb-ready", () => { fbReady = true; fb.onAuthStateChanged(fb.auth, onUser); });
-window.addEventListener("fb-failed", () => toast("Couldn't connect. Check your internet."));
+/* carousel */
+const car = document.getElementById("carousel"), dots = [...document.querySelectorAll("#dots span")];
+let carTimer = null;
+function startCarousel(){ if(carTimer) return; carTimer = setInterval(()=>{ if(!document.getElementById("p-shop").classList.contains("active")||document.hidden) return; const w = car.firstElementChild.offsetWidth+12; const i = Math.round(car.scrollLeft/w); car.scrollTo({left: ((i+1)%dots.length)*w, behavior:"smooth"}); }, 5000); }
+function stopCarousel(){ if(carTimer){ clearInterval(carTimer); carTimer=null; } }
+car.addEventListener("scroll",()=>{ const i = Math.round(car.scrollLeft/(car.firstElementChild.offsetWidth+12)); dots.forEach((d,j)=>d.classList.toggle("on",i===j)); });
+document.addEventListener("visibilitychange",()=>{ document.hidden ? stopCarousel() : startCarousel(); });
+
+/* keyboard */
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){
+    if(document.getElementById("zoom").classList.contains("open")) closeZoom();
+    else if(document.getElementById("bg").classList.contains("open")) closeSheet();
+  }
+});
+
+/* search debounce */
+let qT;
+document.getElementById("q").addEventListener("input", ()=>{ clearTimeout(qT); qT = setTimeout(renderProducts, 200); });
+
+window.addEventListener("fb-ready", () => {
+  fbReady = true;
+  fb.onAuthStateChanged(fb.auth, onUser);
+  startCarousel();
+});
+window.addEventListener("fb-failed", () => {
+  toast("Couldn't connect to Firebase. Check your internet.", 5000);
+});
 renderAll();
+startCarousel();
 </script>
 
 <script type="module">

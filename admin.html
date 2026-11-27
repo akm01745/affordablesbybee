@@ -4,16 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Bee Admin: MoneyBox Payments</title>
+<meta name="theme-color" content="#2E3C87">
+<title>Bee Admin · MoneyBox Payments</title>
 <style>
 :root{--blue:#2E3C87;--blue-d:#1F2A66;--blue-l:#E9ECF8;--gold:#D4A537;--gold-l:#FFF6DE;--green:#11806A;--green-l:#E2F5F0;--red:#C62828;--red-l:#FDECEC;--ink:#151A33;--muted:#6B7090;--line:#E6E8F2}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#F4F5FB;color:var(--ink)}
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#F4F5FB;color:var(--ink);-webkit-text-size-adjust:100%}
 button{font:inherit;border:none;cursor:pointer;background:none;color:inherit}
-.wrap{max-width:900px;margin:0 auto;padding:16px}
-header{display:flex;align-items:center;gap:12px;background:var(--blue);color:#fff;padding:14px 16px}
+.wrap{max-width:960px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;background:var(--blue);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10}
 header img{width:38px;height:38px;border-radius:9px;background:#fff;padding:3px;object-fit:contain}
-header h1{font-size:18px;flex:1}
+header h1{font-size:17px;flex:1;line-height:1.2}
 header button{background:rgba(255,255,255,.15);padding:8px 12px;border-radius:10px;font-size:13px;font-weight:700}
 .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
 .login{max-width:380px;margin:40px auto}
@@ -21,179 +22,531 @@ header button{background:rgba(255,255,255,.15);padding:8px 12px;border-radius:10
 .login p{color:var(--muted);font-size:14px;margin-bottom:14px}
 label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
 input,select{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 13px;font-size:15px;outline:none;background:#fff}
-input:focus{border-color:var(--blue)}
+input:focus,select:focus{border-color:var(--blue)}
 .btn{display:block;width:100%;padding:13px;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;margin-top:12px;text-align:center}
 .btn.ghost{background:var(--blue-l);color:var(--blue)}
-.btn:disabled{opacity:.6}
+.btn:disabled{opacity:.6;cursor:wait}
 .err{color:var(--red);font-size:13px;margin-top:8px;min-height:16px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
 .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
-.stat small{color:var(--muted);font-size:12px}
+.stat small{color:var(--muted);font-size:11.5px}
 .stat b{display:block;font-size:20px;margin-top:4px}
-.stat.p b{color:#B07A10} .stat.c b{color:var(--green)}
+.stat.p b{color:#B07A10} .stat.c b{color:var(--green)} .stat.r b{color:var(--red)}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
-.tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;gap:2px}
-.tabs button{padding:8px 12px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted)}
+.tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:8px 14px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;flex:none}
 .tabs button.on{background:var(--blue);color:#fff}
-.bar input{flex:1;min-width:180px;padding:10px 12px}
-.exp{background:var(--gold);color:#2A1F05;padding:10px 14px;border-radius:12px;font-weight:700;font-size:13px}
+.bar input,.bar select{flex:1;min-width:160px;padding:10px 12px}
+.exp{background:var(--gold);color:#2A1F05;padding:10px 14px;border-radius:12px;font-weight:700;font-size:13px;border:none}
 .row{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center}
+.row.sel{grid-template-columns:auto 1fr auto}
 .ref{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:800;font-size:16px;letter-spacing:.5px;color:var(--blue-d)}
 .meta{font-size:13px;color:var(--muted);margin-top:3px}
 .amt{font-size:18px;font-weight:800;text-align:right}
 .pill{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:10px;margin-left:6px;vertical-align:middle}
-.pill.pending{background:var(--gold-l);color:#8A6512}.pill.confirmed{background:var(--green-l);color:var(--green)}.pill.rejected{background:var(--red-l);color:var(--red)}
+.pill.pending{background:var(--gold-l);color:#8A6512}.pill.confirmed{background:var(--green-l);color:var(--green)}.pill.rejected{background:var(--red-l);color:var(--red)}.pill.shipped{background:#E9ECF8;color:var(--blue)}.pill.delivered{background:#E2F5F0;color:var(--green)}.pill.cancelled{background:var(--red-l);color:var(--red)}
 .acts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
 .acts button{padding:9px 14px;border-radius:10px;font-weight:700;font-size:13px}
-.ok{background:var(--green);color:#fff}.no{background:var(--red-l);color:var(--red)}.undo{background:var(--blue-l);color:var(--blue)}
+.acts button:disabled{opacity:.6;cursor:wait}
+.ok{background:var(--green);color:#fff}.no{background:var(--red-l);color:var(--red)}.undo{background:var(--blue-l);color:var(--blue)}.wa{background:#1FA855;color:#fff}
+.bulk{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;background:var(--blue-l);border-radius:12px;padding:10px 14px;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.bulk label{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--blue-d);font-size:13px;margin:0}
+.bulk .btns{display:flex;gap:8px;flex-wrap:wrap}
+.bulk .btns button{padding:8px 14px;border-radius:10px;font-weight:700;font-size:12.5px}
 .empty{text-align:center;color:var(--muted);padding:40px 0}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 .hide{display:none}
+.fbstat{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;min-height:16px}
+.fbstat.err{color:var(--red)}
+.total{font-size:13px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px}
+.uid{font-size:11px;color:var(--muted);font-family:ui-monospace,Menlo,Consolas,monospace;margin-top:2px;word-break:break-all}
+.topnav{display:flex;background:#fff;border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.topnav button{padding:12px 18px;border-radius:10px;font-weight:700;color:var(--muted);font-size:14px;white-space:nowrap;flex:none;display:flex;align-items:center;gap:6px}
+.topnav button.on{background:var(--blue);color:#fff}
+.topnav .badge{background:var(--gold);color:#2A1F05;font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px}
+.topnav button.on .badge{background:#fff;color:var(--blue)}
+input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--blue)}
+.addr{font-size:12.5px;color:var(--muted);background:var(--blue-l);border-radius:10px;padding:8px 10px;margin-top:6px;line-height:1.5}
+.items{font-size:13px;margin-top:6px}
+.items .it{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line)}
+.items .it:last-child{border:none}
+.items .it b{font-weight:600}
+.invbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
 </style>
 </head>
 <body>
-<header><img src="data:image/jpeg;base64,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" alt=""><h1>Bee Admin · MoneyBox Payments</h1><button id="outBtn" class="hide" onclick="fb.signOut(fb.auth)">Sign out</button></header>
+<header><img src="data:image/jpeg;base64,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" alt=""><h1>Bee Admin</h1><button id="outBtn" class="hide" onclick="signOut()">Sign out</button></header>
 
 <div class="wrap">
   <!-- login -->
   <div id="vLogin" class="card login">
     <h2>Admin sign in</h2>
-    <p>Only the admin email can confirm payments.</p>
+    <p>Only the admin email can confirm payments and orders.</p>
     <label>Email</label><input id="em" type="email" autocomplete="email" value="kehinde0175@gmail.com">
-    <label>Password</label><input id="pw" type="password" autocomplete="current-password">
+    <label>Password</label><input id="pw" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login(false)">
     <div class="err" id="lErr"></div>
     <button class="btn" id="lBtn" onclick="login(false)">Sign in</button>
-    <button class="btn ghost" onclick="login(true)">First time? Create admin account</button>
+    <button class="btn ghost" id="cBtn" onclick="login(true)">First time? Create admin account</button>
+    <div class="fbstat" id="fbStat">Connecting to Firebase…</div>
   </div>
 
   <!-- verify -->
   <div id="vVerify" class="card login hide">
     <h2>Verify your email</h2>
     <p>For security, the admin email must be verified before you can confirm payments. We sent a link to <b id="vEm"></b>. Open it, then tap the button below.</p>
-    <button class="btn" onclick="recheck()">I've verified, continue</button>
-    <button class="btn ghost" onclick="resend()">Resend verification email</button>
+    <button class="btn" id="rcBtn" onclick="recheck(this)">I've verified, continue</button>
+    <button class="btn ghost" id="rsBtn" onclick="resend(this)">Resend verification email</button>
   </div>
 
   <!-- not admin -->
-  <div id="vDenied" class="card login hide"><h2>Not authorised</h2><p>This account is not the admin account.</p><button class="btn ghost" onclick="fb.signOut(fb.auth)">Sign out</button></div>
+  <div id="vDenied" class="card login hide"><h2>Not authorised</h2><p>This account is not the admin account.</p><button class="btn ghost" onclick="signOut()">Sign out</button></div>
 
   <!-- dashboard -->
   <div id="vDash" class="hide">
-    <div class="stats">
-      <div class="stat p"><small>Pending</small><b id="sPend">0</b><small id="sPendAmt">₦0</small></div>
-      <div class="stat c"><small>Confirmed today</small><b id="sToday">₦0</b></div>
-      <div class="stat c"><small>Total confirmed</small><b id="sAll">₦0</b></div>
-      <div class="stat"><small>Customers who paid</small><b id="sCust">0</b></div>
+    <div class="topnav" id="topnav">
+      <button data-t="payments" class="on">Payments <span class="badge" id="navPend">0</span></button>
+      <button data-t="orders">Orders <span class="badge" id="navOrders">0</span></button>
+      <button data-t="customers">Customers</button>
     </div>
-    <div class="bar">
-      <div class="tabs" id="tabs">
-        <button data-f="pending" class="on">Pending</button><button data-f="confirmed">Confirmed</button><button data-f="rejected">Not received</button><button data-f="all">All</button>
+    <div id="panelPayments">
+      <div class="stats">
+        <div class="stat p"><small>Pending</small><b id="sPend">0</b><small id="sPendAmt">₦0</small></div>
+        <div class="stat c"><small>Confirmed today</small><b id="sToday">₦0</b></div>
+        <div class="stat c"><small>This week</small><b id="sWeek">₦0</b></div>
+        <div class="stat c"><small>Total confirmed</small><b id="sAll">₦0</b></div>
+        <div class="stat"><small>Customers who paid</small><b id="sCust">0</b></div>
       </div>
-      <input id="srch" placeholder="Search reference, name, phone or amount…">
-      <button class="exp" onclick="exportCsv()">⬇ Export CSV</button>
+      <div class="bar">
+        <div class="tabs" id="tabs">
+          <button data-f="pending" class="on">Pending</button><button data-f="confirmed">Confirmed</button><button data-f="rejected">Not received</button><button data-f="all">All</button>
+        </div>
+        <select id="range">
+          <option value="all">All time</option>
+          <option value="today">Today</option>
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+        </select>
+        <input id="srch" placeholder="Search reference, name, phone or amount…">
+        <button class="exp" onclick="exportCsv()">⬇ Export CSV</button>
+      </div>
+      <div id="bulkBar" class="bulk hide">
+        <label><input type="checkbox" id="selAll" onchange="toggleAll(this)"> Select all pending</label>
+        <div class="btns">
+          <button class="ok" onclick="bulkConfirm()">✓ Confirm selected</button>
+          <button class="no" onclick="bulkReject()">✗ Reject selected</button>
+        </div>
+      </div>
+      <div id="list"><div class="empty">Loading payments…</div></div>
+      <div class="total" id="listTotal"></div>
     </div>
-    <div id="list"></div>
+
+    <div id="panelOrders" class="hide">
+      <div class="stats">
+        <div class="stat p"><small>Pending orders</small><b id="oPend">0</b></div>
+        <div class="stat c"><small>Confirmed today</small><b id="oToday">0</b></div>
+        <div class="stat c"><small>Total orders</small><b id="oAll">0</b></div>
+        <div class="stat"><small>Total order value</small><b id="oVal">₦0</b></div>
+      </div>
+      <div class="bar">
+        <div class="tabs" id="otabs">
+          <button data-f="pending" class="on">Pending</button><button data-f="confirmed">Confirmed</button><button data-f="shipped">Shipped</button><button data-f="delivered">Delivered</button><button data-f="cancelled">Cancelled</button><button data-f="all">All</button>
+        </div>
+        <input id="osrch" placeholder="Search order ref, name, phone…">
+      </div>
+      <div id="olist"><div class="empty">Loading orders…</div></div>
+      <div class="total" id="oTotal"></div>
+    </div>
+
+    <div id="panelCustomers" class="hide">
+      <div class="stats">
+        <div class="stat"><small>Total customers</small><b id="custAll">0</b></div>
+        <div class="stat c"><small>Held in MoneyBoxes</small><b id="custBal">₦0</b></div>
+      </div>
+      <div class="bar">
+        <input id="csrch" placeholder="Search customer name, phone, email…">
+      </div>
+      <div id="clist"><div class="empty">Loading customers…</div></div>
+      <div class="total" id="cTotal"></div>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 const ADMIN_EMAIL = "kehinde0175@gmail.com";
+const WA_ADMIN = "2348107741388";
 const fmt = n => "₦" + Math.round(n||0).toLocaleString("en-NG");
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let pays = [], filter = "pending", unsub = null;
-let tt; function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2200);}
+let pays = [], orders = [], users = [], filter = "pending", ofilter = "pending", range = "all", tab = "payments", unsub = null, ounsub = null, cunsub = null, loading = true, oloading = true, cloading = true;
+let selected = new Set();
+let tt; function toast(m,ms){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),ms||3500);}
+function signOut(){ if(window.fb) fb.signOut(fb.auth); else toast("Still connecting, please wait"); }
 function show(v){ ["vLogin","vVerify","vDenied","vDash"].forEach(id=>document.getElementById(id).classList.toggle("hide",id!==v)); document.getElementById("outBtn").classList.toggle("hide", v==="vLogin"); }
 const dt = ts => ts&&ts.toDate ? ts.toDate() : null;
 const dstr = ts => { const d = dt(ts); return d ? d.toLocaleString("en-GB",{timeZone:"Africa/Lagos",day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "…"; };
 
 async function login(create){
   const em = document.getElementById("em").value.trim().toLowerCase(), pw = document.getElementById("pw").value, err = m=>document.getElementById("lErr").textContent=m;
+  const btn = document.getElementById(create?"cBtn":"lBtn");
+  if(!window.fb){ return err("Still connecting to Firebase, please wait a moment and try again."); }
   if(em !== ADMIN_EMAIL) return err("Use the admin email: " + ADMIN_EMAIL);
   if(pw.length < 8) return err("Use a password of at least 8 characters");
+  if(create && !confirm("Only do this the VERY FIRST time, to create the admin account.\nIf the account already exists, cancel and tap Sign in.\nContinue?")) return;
+  btn.disabled = true; btn.textContent = "Please wait…"; err("");
   try{
     if(create){ const c = await fb.createUserWithEmailAndPassword(fb.auth, em, pw); await fb.sendEmailVerification(c.user); }
     else await fb.signInWithEmailAndPassword(fb.auth, em, pw);
-  }catch(e){ const c=e.code||""; err(c.includes("already-in-use")?"Admin account already exists. Tap Sign in.":c.includes("invalid-credential")||c.includes("wrong-password")?"Wrong password.":c.includes("too-many")?"Too many attempts, wait a bit.":"Error: "+c); }
+  }catch(e){
+    const c=e.code||"";
+    err(c.includes("already-in-use")?"Admin account already exists. Tap Sign in.":c.includes("invalid-credential")||c.includes("wrong-password")?"Wrong password.":c.includes("too-many")?"Too many attempts, wait a bit.":c.includes("network")?"Network problem, check your connection.":"Error: "+c);
+  }finally{ btn.disabled = false; btn.textContent = create?"First time? Create admin account":"Sign in"; }
 }
-async function recheck(){ await fb.auth.currentUser.reload(); await fb.auth.currentUser.getIdToken(true); route(fb.auth.currentUser); }
-async function resend(){ try{ await fb.sendEmailVerification(fb.auth.currentUser); toast("Verification email sent"); }catch(e){ toast("Wait a minute before resending"); } }
+async function recheck(btn){
+  if(btn){ btn.disabled = true; btn.textContent = "Checking…"; }
+  try{ await fb.auth.currentUser.reload(); await fb.auth.currentUser.getIdToken(true); route(fb.auth.currentUser); }
+  catch(e){ toast("Couldn't refresh your sign-in. Check your connection and try again."); }
+  finally{ if(btn){ btn.disabled = false; btn.textContent = "I've verified, continue"; } }
+}
+async function resend(btn){
+  if(btn){ btn.disabled = true; }
+  try{ await fb.sendEmailVerification(fb.auth.currentUser); toast("Verification email sent"); }
+  catch(e){ toast("Wait a minute before resending"); }
+  finally{ if(btn){ btn.disabled = false; } }
+}
 
 function route(u){
   if(unsub){ unsub(); unsub = null; }
+  if(ounsub){ ounsub(); ounsub = null; }
+  if(cunsub){ cunsub(); cunsub = null; }
   if(!u) return show("vLogin");
   if((u.email||"").toLowerCase() !== ADMIN_EMAIL) return show("vDenied");
   if(!u.emailVerified){ document.getElementById("vEm").textContent = u.email; return show("vVerify"); }
   show("vDash");
+  loading = oloading = cloading = true;
+  document.getElementById("list").innerHTML = `<div class="empty">Loading payments…</div>`;
+  document.getElementById("olist").innerHTML = `<div class="empty">Loading orders…</div>`;
+  document.getElementById("clist").innerHTML = `<div class="empty">Loading customers…</div>`;
   unsub = fb.onSnapshot(fb.query(fb.collection(fb.db,"payments"), fb.orderBy("createdAt","desc"), fb.limit(1000)),
-    s => { pays = s.docs.map(d=>({id:d.id,...d.data()})); render(); },
-    e => { console.error(e); toast("Can't load payments. Check the Firestore rules are published."); });
+    s => { pays = s.docs.map(d=>({id:d.id,...d.data()})); loading = false; render(); },
+    e => { console.error(e); loading = false; toast("Can't load payments. Check the Firestore rules are published.", 6000); });
+  ounsub = fb.onSnapshot(fb.query(fb.collection(fb.db,"orders"), fb.orderBy("createdAt","desc"), fb.limit(500)),
+    s => { orders = s.docs.map(d=>({id:d.id,...d.data()})); oloading = false; renderOrders(); },
+    e => { console.error(e); oloading = false; toast("Can't load orders.", 5000); });
+  cunsub = fb.onSnapshot(fb.query(fb.collection(fb.db,"users"), fb.limit(2000)),
+    s => { users = s.docs.map(d=>({id:d.id,...d.data(), uid:d.id})); cloading = false; renderCustomers(); },
+    e => { console.error(e); cloading = false; toast("Can't load customers.", 5000); });
+}
+
+function inRange(ts){
+  if(range === "all") return true;
+  const d = dt(ts); if(!d) return range === "all";
+  const now = new Date();
+  if(range === "today"){
+    const today = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(now);
+    return new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(d) === today;
+  }
+  const days = parseInt(range,10);
+  return (now - d) <= days * 86400000;
 }
 
 function render(){
   const today = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(new Date());
-  const pend = pays.filter(p=>p.status==="pending"), conf = pays.filter(p=>p.status==="confirmed");
-  document.getElementById("sPend").textContent = pend.length;
-  document.getElementById("sPendAmt").textContent = fmt(pend.reduce((s,p)=>s+p.amount,0));
-  document.getElementById("sToday").textContent = fmt(conf.filter(p=>dt(p.confirmedAt)&&new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(dt(p.confirmedAt))===today).reduce((s,p)=>s+p.amount,0));
+  const pendAll = pays.filter(p=>p.status==="pending");
+  const pend = pendAll.filter(p=>inRange(p.createdAt));
+  const conf = pays.filter(p=>p.status==="confirmed");
+  const confToday = conf.filter(p=>dt(p.confirmedAt)&&new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(dt(p.confirmedAt))===today);
+  const confWeek = conf.filter(p=>dt(p.confirmedAt)&&(new Date()-dt(p.confirmedAt)) <= 7*86400000);
+  document.getElementById("sPend").textContent = pendAll.length;
+  document.getElementById("sPendAmt").textContent = fmt(pendAll.reduce((s,p)=>s+p.amount,0));
+  document.getElementById("sToday").textContent = fmt(confToday.reduce((s,p)=>s+p.amount,0));
+  document.getElementById("sWeek").textContent = fmt(confWeek.reduce((s,p)=>s+p.amount,0));
   document.getElementById("sAll").textContent = fmt(conf.reduce((s,p)=>s+p.amount,0));
   document.getElementById("sCust").textContent = new Set(conf.map(p=>p.uid)).size;
+  document.getElementById("navPend").textContent = pendAll.length;
+  document.getElementById("navOrders").textContent = orders.filter(o=>o.status==="pending").length;
   const q = document.getElementById("srch").value.trim().toLowerCase();
-  const list = pays.filter(p => (filter==="all"||p.status===filter) && (!q || [p.ref,p.name,p.phone,String(p.amount)].join(" ").toLowerCase().includes(q)));
-  document.getElementById("list").innerHTML = list.length ? list.map(p=>`
-    <div class="row">
+  const list = pays.filter(p => (filter==="all"||p.status===filter) && inRange(p.createdAt) && (!q || [p.ref,p.name,p.phone,String(p.amount)].join(" ").toLowerCase().includes(q)));
+  const showBulk = filter === "pending" || filter === "all";
+  document.getElementById("bulkBar").classList.toggle("hide", !showBulk);
+  if(loading){ document.getElementById("list").innerHTML = `<div class="empty">Loading payments…</div>`; document.getElementById("listTotal").textContent = ""; return; }
+  document.getElementById("list").innerHTML = list.length ? list.map(p=>{
+    const checked = selected.has(p.id) ? "checked" : "";
+    const cb = (filter==="pending") ? `<input type="checkbox" data-id="${p.id}" ${checked} onchange="toggleSel('${p.id}',this.checked)">` : "";
+    return `
+    <div class="row ${cb?"sel":""}">
+      ${cb?cb:""}
       <div><span class="ref">${esc(p.ref)}</span><span class="pill ${p.status}">${p.status==="rejected"?"NOT RECEIVED":p.status.toUpperCase()}</span>
         <div class="meta">${esc(p.name)} · +${esc(p.phone)} · ${dstr(p.createdAt)}</div>
-        ${p.confirmedAt?`<div class="meta">${p.status==="confirmed"?"Confirmed":"Updated"} ${dstr(p.confirmedAt)}</div>`:""}</div>
+        <div class="uid">${esc(p.uid||"")}</div>
+        ${p.confirmedAt?`<div class="meta">Confirmed ${dstr(p.confirmedAt)}${p.confirmedBy?" by "+esc(p.confirmedBy):""}</div>`:""}
+        ${p.rejectedAt?`<div class="meta">Rejected ${dstr(p.rejectedAt)}</div>`:""}</div>
       <div class="amt">${fmt(p.amount)}</div>
       <div class="acts">
-        ${p.status==="pending"?`<button class="ok" onclick="confirmPay('${p.id}')">✓ Confirm received</button><button class="no" onclick="rejectPay('${p.id}')">✗ Not received</button>`:""}
-        ${p.status==="confirmed"?`<button class="undo" onclick="reversePay('${p.id}')">↺ Reverse confirmation</button>`:""}
-        ${p.status==="rejected"?`<button class="undo" onclick="setPending('${p.id}')">↺ Move back to pending</button>`:""}
+        ${p.status==="pending"?`<button class="ok" onclick="confirmPay('${p.id}',this)">✓ Confirm</button><button class="no" onclick="rejectPay('${p.id}',this)">✗ Not received</button><button class="wa" onclick="waPay('${p.id}')">💬 WhatsApp</button>`:""}
+        ${p.status==="confirmed"?`<button class="undo" onclick="reversePay('${p.id}',this)">↺ Reverse</button>`:""}
+        ${p.status==="rejected"?`<button class="undo" onclick="setPending('${p.id}',this)">↺ Move back to pending</button>`:""}
       </div>
-    </div>`).join("") : `<div class="empty">Nothing here.</div>`;
+    </div>`;}).join("") : `<div class="empty">Nothing here.</div>`;
+  const total = list.reduce((s,p)=>s+p.amount,0);
+  document.getElementById("listTotal").textContent = list.length ? `Showing ${list.length} · ${fmt(total)}` : "";
+  document.getElementById("selAll").checked = false;
 }
 
-async function confirmPay(id){
+async function confirmPay(id, btn){
   const p = pays.find(x=>x.id===id);
+  if(!p) return toast("This payment is no longer in the loaded list. Refresh the page.");
   if(!confirm(`Confirm ${fmt(p.amount)} received for ${p.ref} (${p.name})?\nThis adds it to the customer's MoneyBox balance.`)) return;
+  if(btn){ btn.disabled = true; btn.textContent = "Confirming…"; }
   try{
     await fb.runTransaction(fb.db, async tx => {
       const pr = fb.doc(fb.db,"payments",id), s = await tx.get(pr);
       if(s.data().status !== "pending") throw new Error("already-done");
-      tx.update(pr, {status:"confirmed", confirmedAt:fb.serverTimestamp(), confirmedBy:ADMIN_EMAIL});
+      tx.update(pr, {status:"confirmed", confirmedAt:fb.serverTimestamp(), confirmedBy:ADMIN_EMAIL, rejectedAt:null});
       tx.update(fb.doc(fb.db,"users",s.data().uid), {balance: fb.increment(s.data().amount)});
     });
     toast(`${p.ref} confirmed ✓`);
   }catch(e){ toast(e.message==="already-done"?"This payment was already processed":"Failed: "+(e.code||e.message)); }
+  finally{ if(btn){ btn.disabled = false; btn.textContent = "✓ Confirm"; } }
 }
-async function reversePay(id){
+async function reversePay(id, btn){
   const p = pays.find(x=>x.id===id);
+  if(!p) return toast("This payment is no longer in the loaded list. Refresh the page.");
   if(!confirm(`Reverse ${p.ref}? ${fmt(p.amount)} will be taken off the customer's balance and the payment goes back to pending.`)) return;
+  if(btn){ btn.disabled = true; btn.textContent = "Reversing…"; }
   try{
     await fb.runTransaction(fb.db, async tx => {
       const pr = fb.doc(fb.db,"payments",id), s = await tx.get(pr);
       if(s.data().status !== "confirmed") throw new Error("already-done");
-      tx.update(pr, {status:"pending", confirmedAt:fb.serverTimestamp()});
+      tx.update(pr, {status:"pending", confirmedAt:null, confirmedBy:null});
       tx.update(fb.doc(fb.db,"users",s.data().uid), {balance: fb.increment(-s.data().amount)});
     });
     toast("Reversed");
-  }catch(e){ toast("Failed: "+(e.code||e.message)); }
+  }catch(e){ toast(e.message==="already-done"?"This payment was already processed":"Failed: "+(e.code||e.message)); }
+  finally{ if(btn){ btn.disabled = false; btn.textContent = "↺ Reverse"; } }
 }
-async function rejectPay(id){ if(!confirm("Mark as NOT received? The customer will see this.")) return; await fb.updateDoc(fb.doc(fb.db,"payments",id),{status:"rejected",confirmedAt:fb.serverTimestamp()}); toast("Marked not received"); }
-async function setPending(id){ await fb.updateDoc(fb.doc(fb.db,"payments",id),{status:"pending"}); toast("Moved back to pending"); }
+async function rejectPay(id, btn){
+  if(!confirm("Mark as NOT received? The customer will see this.")) return;
+  if(btn){ btn.disabled = true; }
+  try{ await fb.updateDoc(fb.doc(fb.db,"payments",id),{status:"rejected", rejectedAt:fb.serverTimestamp(), confirmedAt:null, confirmedBy:null}); toast("Marked not received"); }
+  catch(e){ toast("Failed: "+(e.code||e.message)); }
+  finally{ if(btn){ btn.disabled = false; } }
+}
+async function setPending(id, btn){
+  if(btn){ btn.disabled = true; }
+  try{ await fb.updateDoc(fb.doc(fb.db,"payments",id),{status:"pending", confirmedAt:null, confirmedBy:null, rejectedAt:null}); toast("Moved back to pending"); }
+  catch(e){ toast("Failed: "+(e.code||e.message)); }
+  finally{ if(btn){ btn.disabled = false; } }
+}
+function waPay(id){
+  const p = pays.find(x=>x.id===id); if(!p) return;
+  const u = users.find(x=>x.uid===p.uid);
+  const msg = `Hello ${p.name}, about your MoneyBox payment ${p.ref} of ${fmt(p.amount)} on Affordables by Bee 🐝${u?`\nCurrent MoneyBox balance: ${fmt(u.balance||0)}`:""}.`;
+  window.open(`https://wa.me/${p.phone}?text=`+encodeURIComponent(msg),"_blank");
+}
+
+function toggleSel(id, on){
+  if(on) selected.add(id); else selected.delete(id);
+}
+function toggleAll(cb){
+  const q = document.getElementById("srch").value.trim().toLowerCase();
+  const pend = pays.filter(p => p.status==="pending" && inRange(p.createdAt) && (!q || [p.ref,p.name,p.phone,String(p.amount)].join(" ").toLowerCase().includes(q)));
+  selected = new Set();
+  if(cb.checked) pend.forEach(p=>selected.add(p.id));
+  document.querySelectorAll('#list input[type=checkbox]').forEach(c=>c.checked = cb.checked);
+}
+async function bulkConfirm(){
+  if(!selected.size) return toast("Select at least one pending payment.");
+  if(!confirm(`Confirm ${selected.size} payment(s)? Each customer's MoneyBox balance will be increased.`)) return;
+  let ok = 0, fail = 0;
+  const ids = [...selected];
+  for(const id of ids){
+    try{
+      await fb.runTransaction(fb.db, async tx => {
+        const pr = fb.doc(fb.db,"payments",id), s = await tx.get(pr);
+        if(s.data().status !== "pending") throw new Error("already-done");
+        tx.update(pr, {status:"confirmed", confirmedAt:fb.serverTimestamp(), confirmedBy:ADMIN_EMAIL, rejectedAt:null});
+        tx.update(fb.doc(fb.db,"users",s.data().uid), {balance: fb.increment(s.data().amount)});
+      });
+      ok++;
+    }catch(e){ fail++; }
+  }
+  selected = new Set();
+  toast(`Confirmed ${ok}${fail?`, failed ${fail}`:""} ✓`);
+}
+async function bulkReject(){
+  if(!selected.size) return toast("Select at least one pending payment.");
+  if(!confirm(`Reject ${selected.size} payment(s)? Each will be marked as NOT received.`)) return;
+  let ok = 0, fail = 0;
+  for(const id of [...selected]){
+    try{ await fb.updateDoc(fb.doc(fb.db,"payments",id),{status:"rejected", rejectedAt:fb.serverTimestamp(), confirmedAt:null, confirmedBy:null}); ok++; }
+    catch(e){ fail++; }
+  }
+  selected = new Set();
+  toast(`Rejected ${ok}${fail?`, failed ${fail}`:""}`);
+}
+
+function renderOrders(){
+  const today = new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(new Date());
+  document.getElementById("oPend").textContent = orders.filter(o=>o.status==="pending").length;
+  document.getElementById("oToday").textContent = orders.filter(o=>o.statusUpdatedAt && dt(o.statusUpdatedAt) && new Intl.DateTimeFormat("en-GB",{timeZone:"Africa/Lagos"}).format(dt(o.statusUpdatedAt))===today && o.status==="confirmed").length;
+  document.getElementById("oAll").textContent = orders.length;
+  document.getElementById("oVal").textContent = fmt(orders.reduce((s,o)=>s+(o.total||0),0));
+  const q = document.getElementById("osrch").value.trim().toLowerCase();
+  const list = orders.filter(o => (ofilter==="all"||o.status===ofilter) && (!q || [o.ref||o.id,o.address?.name,o.address?.phone].join(" ").toLowerCase().includes(q)));
+  if(oloading){ document.getElementById("olist").innerHTML = `<div class="empty">Loading orders…</div>`; document.getElementById("oTotal").textContent = ""; return; }
+  document.getElementById("olist").innerHTML = list.length ? list.map(o=>{
+    const u = users.find(x=>x.uid===o.uid);
+    const items = (o.items||[]).map(it=>`<div class="it"><span><b>${esc(it.name||"")}</b>${it.size?` · size ${esc(it.size)}`:""} × ${it.qty||1}</span><span>${fmt(it.price*(it.qty||1))}</span></div>`).join("");
+    return `
+    <div class="row">
+      <div><span class="ref">${esc(o.ref||o.id)}</span><span class="pill ${o.status}">${(o.status||"").toUpperCase()}</span>
+        <div class="meta">${esc(o.address?.name||"")} · +${esc(o.address?.phone||"")} · ${dstr(o.createdAt)}</div>
+        ${o.moneyboxUsed?`<div class="meta">MoneyBox used: ${fmt(o.moneyboxUsed)}</div>`:""}
+        <div class="items">${items}</div>
+        <div class="addr"><b>Deliver to:</b> ${esc(o.address?.line1||"")}, ${esc(o.address?.city||"")}${o.address?.state?", "+esc(o.address.state):""}${o.address?.note?"<br>"+esc(o.address.note):""}</div>
+        ${o.statusUpdatedAt?`<div class="meta">Last updated ${dstr(o.statusUpdatedAt)}${o.statusUpdatedBy?" by "+esc(o.statusUpdatedBy):""}</div>`:""}
+        ${o.trackingRef?`<div class="meta">Tracking: ${esc(o.trackingRef)}</div>`:""}</div>
+      <div class="amt">${fmt(o.total||0)}</div>
+      <div class="acts">
+        ${o.status==="pending"?`<button class="ok" onclick="setOrder('${o.id}','confirmed',this)">✓ Confirm order</button><button class="no" onclick="setOrder('${o.id}','cancelled',this)">✗ Cancel</button><button class="wa" onclick="waOrder('${o.id}')">💬 WhatsApp</button>`:""}
+        ${o.status==="confirmed"?`<button class="ok" onclick="setOrder('${o.id}','shipped',this,prompt('Enter tracking / courier reference (optional):'))">📦 Mark shipped</button><button class="undo" onclick="setOrder('${o.id}','pending',this)">↺ Back to pending</button>`:""}
+        ${o.status==="shipped"?`<button class="ok" onclick="setOrder('${o.id}','delivered',this)">✓ Mark delivered</button>`:""}
+        ${o.status==="cancelled"||o.status==="delivered"?`<button class="undo" onclick="setOrder('${o.id}','pending',this)">↺ Reopen</button>`:""}
+      </div>
+    </div>`;}).join("") : `<div class="empty">No orders here.</div>`;
+  const total = list.reduce((s,o)=>s+(o.total||0),0);
+  document.getElementById("oTotal").textContent = list.length ? `Showing ${list.length} · ${fmt(total)}` : "";
+}
+async function setOrder(id, status, btn, tracking){
+  const o = orders.find(x=>x.id===id); if(!o) return toast("Order not in loaded list. Refresh.");
+  const verb = {confirmed:"confirm",shipped:"mark as shipped",delivered:"mark as delivered",cancelled:"cancel",pending:"reopen"}[status]||"update";
+  if(!confirm(`${verb.charAt(0).toUpperCase()+verb.slice(1)} order ${o.ref||o.id} for ${o.address?.name}?`)) return;
+  if(btn){ btn.disabled = true; }
+  try{
+    const upd = {status, statusUpdatedAt:fb.serverTimestamp(), statusUpdatedBy:ADMIN_EMAIL};
+    if(typeof tracking === "string") upd.trackingRef = tracking.trim();
+    await fb.updateDoc(fb.doc(fb.db,"orders",id), upd);
+    toast(`Order ${verb} ✓`);
+  }catch(e){ toast("Failed: "+(e.code||e.message)); }
+  finally{ if(btn){ btn.disabled = false; renderOrders(); } }
+}
+function waOrder(id){
+  const o = orders.find(x=>x.id===id); if(!o) return;
+  const lines = (o.items||[]).map(it=>`• ${it.name}${it.size?" size "+it.size:""} × ${it.qty||1} — ${fmt(it.price*(it.qty||1))}`).join("\n");
+  const msg = `Hello ${o.address?.name||""}, about your order ${o.ref||o.id} on Affordables by Bee 🐝\n\n${lines}\n\nTotal: ${fmt(o.total||0)}\nMoneyBox used: ${fmt(o.moneyboxUsed||0)}\nDelivery: ${(o.address?.line1||"")}, ${(o.address?.city||"")}\n\nWe'll be in touch about delivery.`;
+  window.open(`https://wa.me/${o.address?.phone||""}?text=`+encodeURIComponent(msg),"_blank");
+}
+
+function renderCustomers(){
+  document.getElementById("custAll").textContent = users.length;
+  document.getElementById("custBal").textContent = fmt(users.reduce((s,u)=>s+(u.balance||0),0));
+  const q = document.getElementById("csrch").value.trim().toLowerCase();
+  const list = users.filter(u => !q || [u.name,u.phone,u.email].join(" ").toLowerCase().includes(q))
+                    .sort((a,b)=>(b.balance||0)-(a.balance||0));
+  if(cloading){ document.getElementById("clist").innerHTML = `<div class="empty">Loading customers…</div>`; document.getElementById("cTotal").textContent = ""; return; }
+  document.getElementById("clist").innerHTML = list.length ? list.slice(0,200).map(u=>{
+    const uPayCount = pays.filter(p=>p.uid===u.uid).length;
+    const uOrdCount = orders.filter(o=>o.uid===u.uid).length;
+    return `
+    <div class="row">
+      <div><b style="font-size:15px">${esc(u.name||"")}</b>
+        <div class="meta">${u.email?esc(u.email)+" · ":""}+${esc(u.phone||"")}</div>
+        <div class="meta">${uPayCount} payment(s) · ${uOrdCount} order(s) · joined ${dstr(u.createdAt)}</div>
+        <div class="uid">${esc(u.uid||"")}</div></div>
+      <div class="amt">${fmt(u.balance||0)}</div>
+      <div class="acts">
+        <button class="wa" onclick="waUser('${u.uid}')">💬 WhatsApp</button>
+        <button class="undo" onclick="showUserDetail('${u.uid}')">View history</button>
+      </div>
+    </div>`;}).join("") : `<div class="empty">No customers match.</div>`;
+  document.getElementById("cTotal").textContent = list.length ? `Showing ${Math.min(200,list.length)} of ${list.length} · Total held ${fmt(list.reduce((s,u)=>s+(u.balance||0),0))}` : "";
+}
+function waUser(uid){
+  const u = users.find(x=>x.uid===uid); if(!u) return;
+  window.open(`https://wa.me/${u.phone}?text=`+encodeURIComponent(`Hello ${u.name}, this is Affordables by Bee 🐝. Your MoneyBox balance is ${fmt(u.balance||0)}.`),"_blank");
+}
+function showUserDetail(uid){
+  const u = users.find(x=>x.uid===uid); if(!u) return;
+  const uPays = pays.filter(p=>p.uid===uid).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,20);
+  const uOrds = orders.filter(o=>o.uid===uid).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,10);
+  const payHtml = uPays.length ? uPays.map(p=>`<div class="it"><span>${esc(p.ref)} · ${dstr(p.createdAt)} · ${p.status}</span><span>${fmt(p.amount)}</span></div>`).join("") : `<div class="meta">No payments.</div>`;
+  const ordHtml = uOrds.length ? uOrds.map(o=>`<div class="it"><span>${esc(o.ref||o.id)} · ${dstr(o.createdAt)} · ${o.status}</span><span>${fmt(o.total||0)}</span></div>`).join("") : `<div class="meta">No orders.</div>`;
+  const html = `<div class="invbox">
+    <h2 style="margin-bottom:6px">${esc(u.name||"")}</h2>
+    <div class="meta">${u.email?esc(u.email):"no email"} · +${esc(u.phone||"")} · MoneyBox: ${fmt(u.balance||0)}</div>
+    <div class="uid" style="margin:6px 0">${esc(u.uid)}</div>
+    <h3 style="margin:14px 0 6px;font-size:15px">Recent payments</h3>
+    <div class="items">${payHtml}</div>
+    <h3 style="margin:14px 0 6px;font-size:15px">Recent orders</h3>
+    <div class="items">${ordHtml}</div>
+    <div class="acts" style="margin-top:14px">
+      <button class="wa" onclick="waUser('${u.uid}')">💬 WhatsApp</button>
+      <button class="undo" onclick="closeSheet()">Close</button>
+    </div>
+  </div>`;
+  showSheet(html);
+}
+
+// simple sheet/modal for customer detail
+function showSheet(html){
+  let bg = document.getElementById("sheetBg");
+  if(!bg){
+    bg = document.createElement("div"); bg.id = "sheetBg";
+    bg.style.cssText = "position:fixed;inset:0;background:rgba(15,20,45,.45);z-index:40;display:block";
+    bg.onclick = closeSheet; document.body.appendChild(bg);
+  }
+  let sh = document.getElementById("sheet");
+  if(!sh){
+    sh = document.createElement("div"); sh.id = "sheet";
+    sh.style.cssText = "position:fixed;left:50%;transform:translate(-50%,0);bottom:0;width:100%;max-width:600px;max-height:88vh;overflow:auto;background:#fff;border-radius:20px 20px 0 0;padding:14px;z-index:41;box-shadow:0 -4px 24px rgba(0,0,0,.15)";
+    document.body.appendChild(sh);
+  }
+  sh.innerHTML = `<button onclick="closeSheet()" style="float:right;font-size:22px;color:var(--muted);width:36px;height:36px;border-radius:50%">×</button>` + html;
+  bg.style.display = "block";
+  requestAnimationFrame(()=>sh.style.transform = "translate(-50%,0)");
+}
+function closeSheet(){
+  const bg = document.getElementById("sheetBg"), sh = document.getElementById("sheet");
+  if(sh) sh.style.transform = "translate(-50%,120%)";
+  if(bg) setTimeout(()=>{ if(bg) bg.style.display="none"; }, 250);
+}
 
 function exportCsv(){
-  const rows = [["Created (Lagos)","Reference","Customer","Phone","Amount","Status","Confirmed/Updated"]]
-    .concat(pays.map(p=>[dstr(p.createdAt),p.ref,p.name,"+"+p.phone,p.amount,p.status,p.confirmedAt?dstr(p.confirmedAt):""]));
+  const q = document.getElementById("srch").value.trim().toLowerCase();
+  const list = pays.filter(p => (filter==="all"||p.status===filter) && inRange(p.createdAt) && (!q || [p.ref,p.name,p.phone,String(p.amount)].join(" ").toLowerCase().includes(q)));
+  if(!list.length) return toast("Nothing to export for the current filter.");
+  const rows = [["Created (Lagos)","Reference","Customer","Phone","Amount","Status","Confirmed/Rejected"]]
+    .concat(list.map(p=>[dstr(p.createdAt),p.ref,p.name,"+"+p.phone,p.amount,p.status==="rejected"?"not received":p.status,p.confirmedAt?dstr(p.confirmedAt):p.rejectedAt?dstr(p.rejectedAt):""]));
   const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
-  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
+  const url = URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));
+  const a = document.createElement("a"); a.href = url;
   a.download = `MoneyBox_Payments_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
 }
-document.getElementById("tabs").addEventListener("click", e => { const f = e.target.dataset.f; if(!f) return; filter = f; document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on", b.dataset.f===f)); render(); });
-document.getElementById("srch").addEventListener("input", render);
-window.addEventListener("fb-ready", () => fb.onAuthStateChanged(fb.auth, route));
+
+let srchT, osrchT, csrchT;
+document.getElementById("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; filter = b.dataset.f; document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on", x===b)); render(); });
+document.getElementById("otabs").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; ofilter = b.dataset.f; document.querySelectorAll("#otabs button").forEach(x=>x.classList.toggle("on", x===b)); renderOrders(); });
+document.getElementById("topnav").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; tab = b.dataset.t; document.querySelectorAll("#topnav button").forEach(x=>x.classList.toggle("on", x===b)); ["panelPayments","panelOrders","panelCustomers"].forEach(id=>document.getElementById(id).classList.toggle("hide", id!=="panel"+tab.charAt(0).toUpperCase()+tab.slice(1))); });
+document.getElementById("range").addEventListener("change", e => { range = e.target.value; render(); });
+document.getElementById("srch").addEventListener("input", () => { clearTimeout(srchT); srchT = setTimeout(render, 200); });
+document.getElementById("osrch").addEventListener("input", () => { clearTimeout(osrchT); osrchT = setTimeout(renderOrders, 200); });
+document.getElementById("csrch").addEventListener("input", () => { clearTimeout(csrchT); csrchT = setTimeout(renderCustomers, 200); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeSheet(); });
+window.addEventListener("fb-ready", () => {
+  document.getElementById("fbStat").textContent = "";
+  fb.onAuthStateChanged(fb.auth, route);
+});
+window.addEventListener("fb-failed", () => {
+  const s = document.getElementById("fbStat");
+  s.textContent = "Couldn't connect to Firebase. Check your internet and reload the page.";
+  s.classList.add("err");
+  document.getElementById("lBtn").disabled = true;
+  document.getElementById("cBtn").disabled = true;
+});
 </script>
 <script type="module">
 const firebaseConfig = {
@@ -204,17 +557,22 @@ const firebaseConfig = {
   messagingSenderId: "894734714811",
   appId: "1:894734714811:web:a405f464d1d2396af1e69e"
 };
-const B = "https://www.gstatic.com/firebasejs/10.12.2/";
-const { initializeApp } = await import(B+"firebase-app.js");
-const A = await import(B+"firebase-auth.js");
-const F = await import(B+"firebase-firestore.js");
-const app = initializeApp(firebaseConfig);
-window.fb = { auth:A.getAuth(app), db:F.getFirestore(app),
-  onAuthStateChanged:A.onAuthStateChanged, signInWithEmailAndPassword:A.signInWithEmailAndPassword, createUserWithEmailAndPassword:A.createUserWithEmailAndPassword,
-  sendEmailVerification:A.sendEmailVerification, signOut:A.signOut,
-  doc:F.doc, collection:F.collection, query:F.query, orderBy:F.orderBy, limit:F.limit, onSnapshot:F.onSnapshot,
-  runTransaction:F.runTransaction, updateDoc:F.updateDoc, increment:F.increment, serverTimestamp:F.serverTimestamp };
-window.dispatchEvent(new Event("fb-ready"));
+try{
+  const B = "https://www.gstatic.com/firebasejs/10.12.2/";
+  const { initializeApp } = await import(B+"firebase-app.js");
+  const A = await import(B+"firebase-auth.js");
+  const F = await import(B+"firebase-firestore.js");
+  const app = initializeApp(firebaseConfig);
+  window.fb = { auth:A.getAuth(app), db:F.getFirestore(app),
+    onAuthStateChanged:A.onAuthStateChanged, signInWithEmailAndPassword:A.signInWithEmailAndPassword, createUserWithEmailAndPassword:A.createUserWithEmailAndPassword,
+    sendEmailVerification:A.sendEmailVerification, signOut:A.signOut,
+    doc:F.doc, collection:F.collection, query:F.query, orderBy:F.orderBy, limit:F.limit, onSnapshot:F.onSnapshot,
+    runTransaction:F.runTransaction, updateDoc:F.updateDoc, increment:F.increment, serverTimestamp:F.serverTimestamp };
+  window.dispatchEvent(new Event("fb-ready"));
+}catch(e){
+  console.error(e);
+  window.dispatchEvent(new Event("fb-failed"));
+}
 </script>
 </body>
 </html>
